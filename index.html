@@ -8,6 +8,11 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Maquis Mania">
 <meta property="og:description" content="Aide Tantie à sauver son maquis ! Aligne alloco, poisson braisé et piment, gagne des étoiles et rénove le maquis.">
+<meta property="og:url" content="https://maquis-mania.vercel.app">
+<meta property="og:image" content="https://maquis-mania.vercel.app/apercu.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Maquis Mania">
@@ -73,6 +78,13 @@
   --creux-cell:rgba(90,50,20,.16);
   --rayon-doux:rgba(255,224,140,.3);
   --nuit-fond:#110c28;
+  --scotch:#ead6a8;
+  --noir:rgba(9,6,26,.94);
+  --noir-bord:rgba(0,0,0,.55);
+  --lumiere-flash:rgba(255,236,170,.75);
+  --boss-bulle:#e6fbef;
+  --boss-fonce:#14532f;
+  --bord-swatch:rgba(0,0,0,.14);
   --p0:#ffd23f; --p1:#62c9f3; --p2:#ff6a58; --p3:#ffffff; --p4:#e0975a; --p5:#93d966; --pfly:#a29cbd; --pot:#3b2516;
   --f-display:"Bungee", Impact, "Arial Black", sans-serif;
   --f-body:"Baloo 2", "Trebuchet MS", system-ui, sans-serif;
@@ -340,6 +352,56 @@ button{font:inherit;color:inherit}
 @keyframes callout{0%{transform:translate(-50%,-50%) scale(.3) rotate(-8deg);opacity:0}18%{transform:translate(-50%,-50%) scale(1.15) rotate(-4deg);opacity:1}30%{transform:translate(-50%,-50%) scale(1) rotate(-4deg);opacity:1}78%{opacity:1}100%{transform:translate(-50%,-75%) scale(1) rotate(-4deg);opacity:0}}
 @keyframes panelIn{from{transform:scale(.86) translateY(12px);opacity:0}}
 @keyframes starpop{0%{transform:scale(.3) rotate(-30deg)}60%{transform:scale(1.25) rotate(8deg)}100%{transform:scale(1) rotate(0)}}
+/* ---------- Chapitre 2 ---------- */
+.tabs{display:flex;gap:6px;min-width:0;flex-wrap:wrap}
+.chip.tab{cursor:pointer;border:0;font:inherit;font-size:12px;font-weight:700;letter-spacing:.04em}
+.chip.tab[aria-pressed="true"]{background:var(--neon);color:var(--neon-coeur)}
+.chip.tab:focus-visible{outline:3px solid var(--ciel);outline-offset:2px}
+.avatar.boss{background:var(--menthe)}
+.tantie-row.boss p{background:var(--boss-bulle)}
+.styles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.style-opt{border:0;border-radius:14px;background:var(--bulle);box-shadow:0 3px 0 var(--sable);padding:8px 6px 10px;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;color:var(--encre);font-family:var(--f-body);font-weight:700;font-size:13px;line-height:1.2}
+.style-opt:active{transform:translateY(2px);box-shadow:0 1px 0 var(--sable)}
+.style-opt:focus-visible{outline:3px solid var(--ciel);outline-offset:2px}
+.style-opt .sw{width:100%;aspect-ratio:1.35;border-radius:10px;box-shadow:inset 0 0 0 1px var(--bord-swatch)}
+.lv-head{margin:4px 0 -4px !important;text-align:left;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:var(--bois-2)}
+.lv-btn.lv-boss{background:radial-gradient(circle at 35% 30%,var(--menthe),var(--boss-fonce));color:var(--neon-coeur)}
+.crate{--tl:#f3d3a0;--tc:#c8925a;--td:#8a5a2b}
+.crate .tile{border-radius:18%}
+.crate .tile::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(90deg,transparent 43%,var(--scotch) 43% 57%,transparent 57%)}
+.crate2 .tile::before{background:linear-gradient(90deg,transparent 43%,var(--scotch) 43% 57%,transparent 57%),linear-gradient(0deg,transparent 43%,var(--scotch) 43% 57%,transparent 57%)}
+.crate2{--tc:#b07a42;--td:#6e4419}
+.hit .tile{animation:hit .38s ease-out}
+.shade{position:absolute;inset:var(--frame);border-radius:14px;display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);overflow:hidden;pointer-events:none}
+.sh{opacity:0;transition:opacity .5s ease;background:var(--noir);box-shadow:inset 0 0 calc(var(--cell) * .25) var(--noir-bord)}
+.sh[data-on="1"]{opacity:1}
+.sh.flash{animation:lightOn .6s ease-out}
+.boss-pop{position:absolute;left:50%;top:6px;z-index:7;display:flex;align-items:center;gap:8px;padding:6px 14px 6px 6px;border-radius:999px;background:var(--boss-fonce);color:var(--neon-coeur);font-family:var(--f-display);font-size:15px;white-space:nowrap;box-shadow:0 0 0 3px var(--menthe),0 10px 24px var(--ombre-forte);pointer-events:none;opacity:0;transform:translate(-50%,-30px)}
+.boss-pop .bp-face{width:36px;height:36px;border-radius:50%;background:var(--menthe);display:grid;place-items:center;font-size:24px;line-height:1}
+.boss-pop.show{animation:bossPop 1.6s ease-out forwards}
+#scene .yo-new,#scene .boss-dance{display:none}
+#scene.d-deblai .yo-junk,#scene.d-deblai .yo-shutter,#scene.d-facade .yo-wall-old,#scene.d-auvent .yo-awn-old,#scene.d-comptoir .yo-bar-old,#scene.d-lumieres .yo-lights-old,#scene.d-enseigne .yo-sign-old,#scene.d-ouverture .boss-guy{display:none}
+#scene.d-facade .yo-wall-new,#scene.d-auvent .yo-awn-new,#scene.d-comptoir .yo-bar-new,#scene.d-mobilier .yo-furn,#scene.d-mobilier .yk1,#scene.d-mobilier .yk2,#scene.d-mobilier .yk3,#scene.d-mobilier .yk4,#scene.d-mobilier .drink,
+#scene.d-four .yo-grill,#scene.d-lumieres .yo-lights-new,#scene.d-lumieres .yo-lit,#scene.d-ecran .yo-screen,#scene.d-ecran .yk5,#scene.d-ecran .yk6,#scene.d-dj .yo-dj,#scene.d-dj .dancers,#scene.d-enseigne .yo-sign-new,#scene.d-ouverture .boss-dance{display:inline}
+#scene [class*="yo-"],#scene .boss-guy,#scene .boss-neon,#scene .boss-foot,#scene .lamp{transform-box:fill-box;transform-origin:50% 100%}
+#scene .lamp{transform-origin:50% 0;animation:sway2 3s ease-in-out infinite}
+#scene.d-dj .bob{animation-name:party;animation-duration:.7s}
+#scene .yo-sign-new{animation:neonbuzz 7s linear infinite}
+#scene .boss-neon{animation:bossneon 2.4s steps(1) infinite}
+#scene.d-ouverture .boss-neon{animation:none;opacity:.12}
+#scene .boss-foot{animation:tap .7s ease-in-out infinite}
+#scene .a-rollup{animation:rollup .9s ease-in forwards}
+#scene .a-grr{animation:grr .5s ease-in-out 2}
+#scene .a-off{animation:aOff 1.2s linear forwards}
+@keyframes hit{0%{transform:scale(1)}30%{transform:scale(.82) rotate(-6deg)}60%{transform:scale(1.08) rotate(4deg)}100%{transform:none}}
+@keyframes lightOn{0%{opacity:1;background:var(--lumiere-flash)}100%{opacity:0}}
+@keyframes bossPop{0%{opacity:0;transform:translate(-50%,-30px) scale(.6)}15%{opacity:1;transform:translate(-50%,6px) scale(1.06)}25%{transform:translate(-50%,0) scale(1) rotate(-3deg)}35%{transform:translate(-50%,0) rotate(3deg)}45%{transform:translate(-50%,0) rotate(0)}80%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-30px)}}
+@keyframes sway2{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+@keyframes bossneon{0%,70%{opacity:1}72%{opacity:.3}74%{opacity:1}86%{opacity:.4}88%,100%{opacity:1}}
+@keyframes tap{0%,100%{transform:rotate(0)}50%{transform:rotate(-10deg)}}
+@keyframes rollup{0%{transform:scaleY(1)}100%{transform:scaleY(.04)}}
+@keyframes grr{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px) rotate(-3deg)}75%{transform:translateX(3px) rotate(3deg)}}
+@keyframes aOff{0%{opacity:1}15%{opacity:.2}25%{opacity:1}45%{opacity:.1}55%{opacity:.8}100%{opacity:.12}}
 @keyframes land{0%{transform:scale(1.12,.84) translateY(7%)}45%{transform:scale(.95,1.07) translateY(-3%)}100%{transform:none}}
 @keyframes glint{0%,100%{filter:none}50%{filter:brightness(1.35) saturate(1.15)}}
 @keyframes boardGlow{0%{opacity:0;box-shadow:0 0 0 0 var(--halo-neon)}30%{opacity:1;box-shadow:0 0 0 5px var(--neon),0 0 40px 12px var(--halo-neon)}100%{opacity:0;box-shadow:0 0 0 2px var(--neon),0 0 60px 20px var(--halo-neon)}}
@@ -375,7 +437,7 @@ button{font:inherit;color:inherit}
 @keyframes wave{from{transform:rotate(-20deg)}to{transform:rotate(20deg)}}
 @keyframes aShine{from{transform:translateX(0)}to{transform:translateX(580px)}}
 @media (prefers-reduced-motion: reduce){
-  .logo .l1,.logo .l2,#renoBtn.ready,.glint .tile,.rays.show,.board.glow::after,.fly .em,.sp-b .tile,.pot .tile::before,.hint .tile,.coups.low .big,.shake,#scene *{animation:none !important}
+  .logo .l1,.logo .l2,#renoBtn.ready,.boss-pop.show,.hit .tile,.glint .tile,.rays.show,.board.glow::after,.fly .em,.sp-b .tile,.pot .tile::before,.hint .tile,.coups.low .big,.shake,#scene *{animation:none !important}
 }
 </style>
 </head>
@@ -386,11 +448,11 @@ button{font:inherit;color:inherit}
       <h1 class="logo"><span class="l1">Maquis</span> <span class="l2">Mania</span></h1>
       <button id="soundHome" class="btn-ghost">Son : oui</button>
     </header>
-    <div class="scene-hud"><span class="chip">Chapitre 1 · Chez Tantie</span><span class="chip wallet" id="wallet" aria-label="Étoiles à dépenser">★ 0</span></div>
+    <div class="scene-hud"><div class="tabs" id="chTabs"><span class="chip">Chapitre 1 · Chez Tantie</span></div><span class="chip wallet" id="wallet" aria-label="Étoiles à dépenser">★ 0</span></div>
     <div class="scene-wrap">
       <svg id="scene" viewBox="0 0 400 300" role="img" aria-label="Le maquis de Tantie, la nuit"></svg>
     </div>
-    <div class="bulle-tantie"><span class="avatar" aria-hidden="true">👩🏾‍🍳</span><p id="tantieLine" aria-live="polite">Ah, mon fils, tu es là !</p></div>
+    <div class="bulle-tantie"><span class="avatar" id="sayAvatar" aria-hidden="true">👩🏾‍🍳</span><p id="tantieLine" aria-live="polite">Ah, mon fils, tu es là !</p></div>
     <div class="reno-bar"><span>Rénovation</span><div class="track"><div id="renoFill"></div></div><span id="renoCount">0/11</span></div>
     <div class="task-card">
       <div class="task-info"><span class="kicker" id="taskKicker">Chantier 1 sur 11</span><strong id="taskName">Balayer la terrasse</strong><span id="taskDesc">Papiers, bouteilles, feuilles… tout traîne par terre.</span></div>
@@ -420,11 +482,13 @@ button{font:inherit;color:inherit}
     <div id="board" class="board" tabindex="0" aria-label="Plateau de jeu. Flèches pour déplacer le curseur, Entrée pour choisir une pièce, puis une flèche pour l'échanger.">
       <div class="cells" id="cells"></div>
       <div class="pieces" id="pieces"></div>
+      <div class="shade" id="shade"></div>
       <div class="fx" id="fx"><div id="cursor"></div></div>
     </div>
     <canvas id="fxc" class="fxc" aria-hidden="true"></canvas>
     <div id="rays" class="rays" aria-hidden="true"></div>
     <div id="callout" class="callout" aria-live="polite"></div>
+    <div id="bossPop" class="boss-pop" aria-hidden="true"><span class="bp-face">😎</span><span class="bp-say">Prends ça !</span></div>
   </div>
   <p class="astuce" id="tip"></p>
 </section>
@@ -441,7 +505,7 @@ button{font:inherit;color:inherit}
 
 <script id="engine">
 const MM = (() => {
-  const N = 8, FLY = -2, POT = -1;
+  const N = 8, FLY = -2, POT = -1, CRATE = -3;
   const LEVELS = [
     { name: "L'ouverture", moves: 18, colors: 5, goals: [{ kind: 'collect', t: 0, n: 15 }], stars: [2000, 7000, 11500],
       tantie: "Les premiers clients arrivent ! Sers-leur 15 alloco. Fais glisser une pièce pour en aligner 3 pareilles.",
@@ -498,6 +562,67 @@ const MM = (() => {
       layout: ["........", ".dddddd.", ".dDDDDd.", ".dD..Dd.", ".dD..Dd.", ".dDDDDd.", "f......f", "ff....ff"],
       tantie: "C'est le grand soir. Tout doit être parfait pour la fête du quartier !",
       tip: "Marmite et feu échangés ensemble : le coup de grâce." },
+    { name: "Le nouveau local", moves: 20, colors: 5, goals: [{ kind: 'crates' }], stars: [3000, 9000, 13000],
+      layout: ["........", "........", "........", "........", "..cccc..", ".CC..CC.", "..cccc..", "........"],
+      tantie: "Le local de la Rue Princesse est rempli de vieux cartons ! Fais tes combinaisons juste à côté pour les casser. Les gros cartons demandent deux coups.",
+      tip: "Les cartons tombent avec les pièces. Une explosion à côté les abîme aussi." },
+    { name: "Le voisin d'en face", moves: 20, colors: 5, goals: [{ kind: 'crates' }, { kind: 'collect', t: 1, n: 16 }], stars: [3000, 9500, 13500],
+      layout: ["........", "........", "........", "c.c..c.c", "........", "C......C", "..C..C..", "........"],
+      tantie: "On n'a pas fini de ranger que le patron d'en face vient déjà nous regarder de travers…",
+      bossLine: "Tchié ! Encore un maquis dans MA rue ? Vous n'allez pas tenir une semaine.",
+      tip: "Casse les cartons du bas en premier : ça libère de la place pour les cascades." },
+    { name: "Coupure de courant", moves: 22, colors: 5, goals: [{ kind: 'light' }], stars: [3000, 9000, 13000],
+      layout: ["nnnnnnnn", "nnnnnnnn", "nnnnnnnn", "........", "........", "........", "........", "........"],
+      tantie: "Délestage ! Le haut du plateau est dans le noir. Chaque combinaison faite dans le noir rallume la case.",
+      tip: "Dans le noir, on ne voit pas les pièces. Un feu vertical rallume toute une colonne." },
+    { name: "Le courant revient", moves: 25, colors: 5, goals: [{ kind: 'light' }, { kind: 'collect', t: 0, n: 18 }], stars: [3000, 10000, 14500],
+      layout: ["nn....nn", "nn....nn", "nn....nn", "........", "........", "nn....nn", "nn....nn", "nn....nn"],
+      tantie: "Le courant revient par morceaux… Rallume les coins et sers les alloco en même temps.",
+      tip: "Les coins sont difficiles. Une braise bien placée en rallume neuf d'un coup." },
+    { name: "Le Boss attaque", moves: 22, colors: 5, goals: [{ kind: 'boss' }], boss: { hp: 200, every: 4, attack: ['crates'], n: 3 }, stars: [3000, 13000, 18000],
+      tantie: "Le Boss a envoyé ses gars nous déposer des cartons pendant qu'on sert ! Chaque pièce que tu casses lui fait mal.",
+      bossLine: "Tu veux la guerre ? Prends mes cartons !",
+      tip: "Le Boss attaque tous les 4 coups. Plus tu fais de cascades, plus il prend cher." },
+    { name: "Cartons et mouches", moves: 24, colors: 5, spread: true, goals: [{ kind: 'crates' }, { kind: 'flies' }], stars: [3000, 11000, 15500],
+      layout: ["........", "........", "........", "..c..c..", ".C....C.", "..c..c..", "f......f", "ff....ff"],
+      tantie: "Les mouches se cachent derrière les cartons. On nettoie tout ça !",
+      tip: "Une combinaison collée à un carton et à une mouche fait d'une pierre deux coups." },
+    { name: "Nuit noire", moves: 26, colors: 5, goals: [{ kind: 'light' }, { kind: 'dirt' }], stars: [3000, 12500, 17500],
+      layout: ["nnnnnnnn", "nnnnnnnn", "nnnnnnnn", "nnnnnnnn", "........", "dddddddd", "dddddddd", "........"],
+      tantie: "Plus de courant et la boue de la pluie… Rallume tout et fais briller le sol.",
+      tip: "Les pièces qui tombent du noir deviennent visibles en arrivant dans la lumière." },
+    { name: "Livraison bloquée", moves: 22, colors: 5, goals: [{ kind: 'crates' }, { kind: 'collect', t: 4, n: 18 }], stars: [3000, 11000, 15500],
+      layout: ["........", "........", "........", "C..CC..C", "........", ".C.CC.C.", "........", "........"],
+      tantie: "Le livreur a tout empilé devant la porte. Casse les cartons et sors les poulets !",
+      tip: "Une marmite échangée avec un poulet fait le ménage dans toute la commande." },
+    { name: "Délestage", moves: 22, colors: 5, goals: [{ kind: 'light' }, { kind: 'crates' }], stars: [3000, 11000, 15500],
+      layout: ["n.n.n.n.", ".n.n.n.n", "n.n.n.n.", ".n.n.n.n", "........", "..c..c..", ".C....C.", "........"],
+      tantie: "Le courant saute une case sur deux. Et les cartons sont toujours là !",
+      tip: "Vise les lignes : un seul feu rallume plusieurs cases d'un coup." },
+    { name: "Le Boss coupe le courant", moves: 22, colors: 5, goals: [{ kind: 'boss' }], boss: { hp: 210, every: 3, attack: ['dark'] }, stars: [3000, 14000, 19000],
+      tantie: "Le Boss a trafiqué le compteur ! Il va couper le courant pendant qu'on joue. Ne te laisse pas faire.",
+      bossLine: "Allez, on éteint tout. On verra si vous servez dans le noir !",
+      tip: "Dans le noir, continue à jouer en bas : les cascades rallument au passage." },
+    { name: "Grand rush", moves: 22, colors: 6, goals: [{ kind: 'collect', t: 1, n: 15 }, { kind: 'collect', t: 3, n: 15 }, { kind: 'collect', t: 4, n: 15 }], stars: [3000, 7000, 9500],
+      tantie: "Tout Yopougon veut goûter chez nous ! Poisson, attiéké, poulet : on envoie !",
+      tip: "Avec 6 sortes de pièces, chaque pièce spéciale compte double." },
+    { name: "Mouches dans le noir", moves: 24, colors: 5, spread: true, goals: [{ kind: 'light' }, { kind: 'flies' }], stars: [3000, 12000, 16500],
+      layout: ["nnnnnnnn", "nnnnnnnn", "nnnnnnnn", "........", "........", "........", ".f.ff.f.", "f.f..f.f"],
+      tantie: "Profitant du noir, les mouches sont revenues. On rallume et on les chasse !",
+      tip: "Les mouches se multiplient si tu ne les touches pas. Commence par elles." },
+    { name: "Embrouille", moves: 24, colors: 5, spread: true, goals: [{ kind: 'crates' }, { kind: 'dirt' }, { kind: 'flies' }], stars: [3000, 13000, 18000],
+      layout: ["........", "..C..C..", "........", "dddddddd", "dDDddDDd", "dddddddd", "f..cc..f", "ff....ff"],
+      tantie: "Les gars du Boss ont tout renversé cette nuit. Cartons, boue, mouches : c'est le désordre total.",
+      tip: "Deux pièces spéciales échangées ensemble règlent plusieurs problèmes d'un coup." },
+    { name: "Veille d'ouverture", moves: 24, colors: 5, goals: [{ kind: 'light' }, { kind: 'crates' }, { kind: 'collect', t: 2, n: 20 }], stars: [3000, 12000, 15500],
+      layout: ["nnnnnnnn", "nnnnnnnn", "........", "........", "..CccC..", "........", "........", "........"],
+      tantie: "Demain c'est la grande ouverture. Il faut de la lumière, de la place et beaucoup de piment !",
+      tip: "Garde tes marmites pour la fin : elles vident le plateau d'une couleur." },
+    { name: "Le Boss final", moves: 26, colors: 5, goals: [{ kind: 'boss' }], boss: { hp: 270, every: 3, attack: ['crates', 'dark'], n: 3 }, stars: [3000, 17000, 23000],
+      layout: ["........", "........", "........", "........", "........", "..c..c..", ".C....C.", "........"],
+      tantie: "C'est le soir de l'ouverture et le Boss sort le grand jeu. Cartons, coupures… Montre-lui qui est le patron de la Rue Princesse !",
+      bossLine: "Ce soir, c'est vous ou moi. Et ce sera moi !",
+      tip: "Combo marmite + feu : la meilleure arme contre le Boss." },
   ];
 
   function rnd(S) {
@@ -511,7 +636,8 @@ const MM = (() => {
   const rc = k => [(k / N) | 0, k % N];
   const inb = (r, c) => r >= 0 && r < N && c >= 0 && c < N;
   const isFood = p => !!p && p.t >= 0;
-  const piece = (S, t, sp) => ({ id: ++S.nextId, t, sp: sp || null });
+  const piece = (S, t, sp, hp) => (hp ? { id: ++S.nextId, t, sp: sp || null, hp } : { id: ++S.nextId, t, sp: sp || null });
+  const fixed = p => !!p && (p.t === FLY || p.t === CRATE);
   const at = (S, k) => S.grid[(k / N) | 0][k % N];
   function neigh(k) { const [r, c] = rc(k), out = []; for (const [dr, dc] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) if (inb(r + dr, c + dc)) out.push(key(r + dr, c + dc)); return out; }
   function box(r, c, rad, out) { for (let y = r - rad; y <= r + rad; y++) for (let x = c - rad; x <= c + rad; x++) if (inb(y, x)) out.push(key(y, x)); }
@@ -529,13 +655,14 @@ const MM = (() => {
     }
   }
   function create(L, seed) {
-    const S = { L, seed: (seed >>> 0) || 1, nextId: 0, grid: [], dirt: [], moves: L.moves, score: 0, collected: {}, combo: 0, moveFlyKills: 0 };
+    const S = { L, seed: (seed >>> 0) || 1, nextId: 0, grid: [], dirt: [], dark: [], moves: L.moves, score: 0, collected: {}, combo: 0, moveFlyKills: 0, bossDmg: 0, turn: 0 };
     for (let r = 0; r < N; r++) {
-      S.grid.push([]); S.dirt.push([]);
+      S.grid.push([]); S.dirt.push([]); S.dark.push([]);
       for (let c = 0; c < N; c++) {
         const ch = L.layout ? L.layout[r][c] : '.';
         S.dirt[r].push(ch === 'd' ? 1 : ch === 'D' ? 2 : 0);
-        S.grid[r].push(ch === 'f' ? piece(S, FLY) : null);
+        S.dark[r].push(ch === 'n' ? 1 : 0);
+        S.grid[r].push(ch === 'f' ? piece(S, FLY) : ch === 'c' ? piece(S, CRATE, null, 1) : ch === 'C' ? piece(S, CRATE, null, 2) : null);
       }
     }
     fill(S);
@@ -564,7 +691,7 @@ const MM = (() => {
       const r2 = r + dr, c2 = c + dc;
       if (!inb(r2, c2)) continue;
       const a = S.grid[r][c], b = S.grid[r2][c2];
-      if (!a || !b || a.t === FLY || b.t === FLY) continue;
+      if (!a || !b || fixed(a) || fixed(b)) continue;
       if (isCombo(a, b)) return [[r, c], [r2, c2]];
       swap(S, [r, c], [r2, c2]);
       const ok = matchAt(S, r, c) || matchAt(S, r2, c2);
@@ -577,7 +704,7 @@ const MM = (() => {
   function trySwap(S, a, b) {
     if (Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) !== 1 || !inb(a[0], a[1]) || !inb(b[0], b[1])) return { ok: false };
     const pa = S.grid[a[0]][a[1]], pb = S.grid[b[0]][b[1]];
-    if (!pa || !pb || pa.t === FLY || pb.t === FLY) return { ok: false, blocked: true };
+    if (!pa || !pb || fixed(pa) || fixed(pb)) return { ok: false, blocked: true };
     const combo = isCombo(pa, pb);
     swap(S, a, b);
     if (!combo && !(matchAt(S, a[0], a[1]) || matchAt(S, b[0], b[1]))) { swap(S, a, b); return { ok: false }; }
@@ -711,7 +838,7 @@ const MM = (() => {
   function resolveStep(S, ctx) {
     ctx = ctx || {};
     const g = S.grid, clear = new Set(), placements = new Map(), triggered = new Set();
-    const res = { cleared: [], created: [], effects: [], dirt: [], converted: [], fliesKilled: 0, gained: 0, mult: 0 };
+    const res = { cleared: [], created: [], effects: [], dirt: [], light: [], damaged: [], converted: [], fliesKilled: 0, gained: 0, mult: 0 };
     if (ctx.combo) seedCombo(S, ctx.combo, clear, triggered, res);
     else if (ctx.seeds) { if (!ctx.seeds.length) return null; ctx.seeds.forEach(k => clear.add(k)); }
     else {
@@ -721,7 +848,7 @@ const MM = (() => {
         const spec = specialFor(S, grp, ctx.swapKeys || []);
         for (const k of grp.keys) if (!spec || k !== spec.place) clear.add(k);
         if (spec) placements.set(spec.place, spec.sp);
-        for (const k of grp.keys) for (const n of neigh(k)) { const p = at(S, n); if (p && p.t === FLY) clear.add(n); }
+        for (const k of grp.keys) for (const n of neigh(k)) { const p = at(S, n); if (fixed(p)) clear.add(n); }
       }
     }
     S.combo++; res.mult = S.combo;
@@ -739,16 +866,20 @@ const MM = (() => {
     for (const k of clear) {
       const [r, c] = rc(k), p = g[r][c];
       if (!p) continue;
+      if (p.t === CRATE && p.hp > 1) { p.hp--; res.damaged.push({ id: p.id, r, c, t: p.t, hp: p.hp }); res.gained += 60; continue; }
       res.cleared.push({ id: p.id, r, c, t: p.t, sp: p.sp });
       g[r][c] = null;
       if (p.t >= 0) { S.collected[p.t] = (S.collected[p.t] || 0) + 1; res.gained += 20 * mult; }
       else if (p.t === FLY) { res.fliesKilled++; res.gained += 100; }
+      else if (p.t === CRATE) res.gained += 120;
       else res.gained += 150;
     }
     for (const k of new Set([...clear, ...placements.keys()])) {
       const [r, c] = rc(k);
       if (S.dirt[r][c] > 0) { S.dirt[r][c]--; res.dirt.push({ r, c, v: S.dirt[r][c] }); res.gained += 50; }
+      if (S.dark[r][c]) { S.dark[r][c] = 0; res.light.push({ r, c }); res.gained += 40; }
     }
+    if (S.L.boss) S.bossDmg += res.cleared.length + res.damaged.length;
     for (const [k, sp] of placements) {
       const [r, c] = rc(k), p = g[r][c];
       if (!p) continue;
@@ -782,9 +913,12 @@ const MM = (() => {
     return S.L.goals.map(g => {
       let left = 0;
       if (g.kind === 'collect') left = Math.max(0, g.n - (S.collected[g.t] || 0));
+      else if (g.kind === 'boss') left = Math.max(0, S.L.boss.hp - S.bossDmg);
       else for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
         if (g.kind === 'dirt' && S.dirt[r][c] > 0) left++;
+        if (g.kind === 'light' && S.dark[r][c]) left++;
         if (g.kind === 'flies' && S.grid[r][c] && S.grid[r][c].t === FLY) left++;
+        if (g.kind === 'crates' && S.grid[r][c] && S.grid[r][c].t === CRATE) left++;
       }
       return Object.assign({}, g, { left });
     });
@@ -805,7 +939,7 @@ const MM = (() => {
   }
   function shuffle(S) {
     const cells = [], ps = [];
-    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) { const p = S.grid[r][c]; if (p && p.t !== FLY) { cells.push([r, c]); ps.push(p); } }
+    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) { const p = S.grid[r][c]; if (p && !fixed(p)) { cells.push([r, c]); ps.push(p); } }
     let ok = false;
     for (let tries = 0; tries < 300 && !ok; tries++) {
       for (let i = ps.length - 1; i > 0; i--) { const j = ri(S, i + 1); [ps[i], ps[j]] = [ps[j], ps[i]]; }
@@ -816,8 +950,8 @@ const MM = (() => {
       // Recolor plain pieces; if flies leave no room for a move, turn one fly back into food.
       if (guard >= 20 && guard % 10 === 0) {
         const flies = [];
-        for (let k = 0; k < N * N; k++) { const p = at(S, k); if (p && p.t === FLY) flies.push(p); }
-        if (flies.length) flies[ri(S, flies.length)].t = 0;
+        for (let k = 0; k < N * N; k++) { const p = at(S, k); if (fixed(p)) flies.push(p); }
+        if (flies.length) { const f = flies[ri(S, flies.length)]; f.t = 0; delete f.hp; }
       }
       for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
         const p = S.grid[r][c];
@@ -826,16 +960,35 @@ const MM = (() => {
       ok = !findRuns(S).length && !!findMove(S);
     }
     const out = [];
-    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) { const p = S.grid[r][c]; out.push({ id: p.id, r, c, t: p.t, sp: p.sp }); }
+    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) { const p = S.grid[r][c]; out.push({ id: p.id, r, c, t: p.t, sp: p.sp, hp: p.hp }); }
     return out;
   }
   const ensureMove = S => findMove(S) ? null : shuffle(S);
+  function bossAttack(S) {
+    const B = S.L.boss, kind = B.attack[(S.turn / B.every - 1) % B.attack.length];
+    if (kind === 'crates') {
+      const cand = [];
+      for (let k = 0; k < N * N; k++) { const p = at(S, k); if (isFood(p) && !p.sp) cand.push(k); }
+      const cells = [];
+      for (let i = 0; i < (B.n || 3) && cand.length; i++) {
+        const k = cand.splice(ri(S, cand.length), 1)[0], p = at(S, k), [r, c] = rc(k);
+        p.t = CRATE; p.hp = 1; cells.push({ id: p.id, r, c, t: CRATE, hp: 1 });
+      }
+      return { kind, cells };
+    }
+    const r0 = 1 + ri(S, N - 2), c0 = 1 + ri(S, N - 2), cells = [];
+    for (let r = r0 - 1; r <= r0 + 1; r++) for (let c = c0 - 1; c <= c0 + 1; c++) if (!S.dark[r][c]) { S.dark[r][c] = 1; cells.push({ r, c }); }
+    return { kind: 'dark', cells };
+  }
   function endMove(S) {
-    const res = { spread: null, shuffled: null, state: 'play' };
+    const res = { spread: null, shuffled: null, attack: null, state: 'play' };
     if (S.L.spread && S.moveFlyKills === 0) res.spread = spread(S);
     if (goalsDone(S)) res.state = 'win';
     else if (S.moves <= 0) res.state = 'lose';
-    else res.shuffled = ensureMove(S);
+    else {
+      if (S.L.boss) { S.turn++; if (S.turn % S.L.boss.every === 0) res.attack = bossAttack(S); }
+      res.shuffled = ensureMove(S);
+    }
     return res;
   }
   function bonusConvert(S) {
@@ -850,13 +1003,13 @@ const MM = (() => {
   function specialKeys(S) { const out = []; for (let k = 0; k < N * N; k++) { const p = at(S, k); if (p && p.sp) out.push(k); } return out; }
   const starsFor = S => S.score >= S.L.stars[2] ? 3 : S.score >= S.L.stars[1] ? 2 : 1;
 
-  return { N, FLY, POT, LEVELS, create, trySwap, resolveStep, gravity, endMove, ensureMove, goalStatus, goalsDone, findMove, findRuns, bonusConvert, specialKeys, starsFor };
+  return { N, FLY, POT, CRATE, LEVELS, create, trySwap, resolveStep, gravity, endMove, ensureMove, goalStatus, goalsDone, findMove, findRuns, bonusConvert, specialKeys, starsFor };
 })();
 </script>
 
 <script>
 (() => {
-  const { LEVELS, N, FLY, POT } = MM;
+  const { LEVELS, N, FLY, POT, CRATE } = MM;
   const TYPES = [
     { e: '🍌', one: 'alloco', many: 'alloco' },
     { e: '🐟', one: 'poisson', many: 'poissons' },
@@ -898,19 +1051,62 @@ const MM = (() => {
       done: 'Le maquis est sauvé ! Merci mon fils, tu es le meilleur.' },
   ];
 
+  /* ----- Les chantiers du chapitre 2 ----- */
+  const TASKS2 = [
+    { id: 'deblai', name: 'Déblayer le local', desc: 'Cartons, sacs, vieux rideau rouillé : il faut tout dégager.', cost: 2, focus: [140, 190, 1.25],
+      done: 'Ouf, on respire ! Le local est plus grand que je croyais.', boss: "Hé, faut pas jeter vos cartons devant chez moi, hein !" },
+    { id: 'facade', name: 'Repeindre la façade', desc: 'Le mur gris, ça fait fuir les clients.', cost: 3, focus: [143, 125, 1.05],
+      styles: [{ n: 'Wax orange', sw: 'linear-gradient(#e8773a 0 58%,#ffd23f 58% 68%,#17807f 68% 78%,#e8773a 78%)' },
+        { n: 'Bleu lagune', sw: 'linear-gradient(#2a78c2 0 58%,#fff4e2 58% 72%,#2a78c2 72%)' },
+        { n: 'Vert ivoire', sw: 'linear-gradient(#1f9d5a 0 58%,#ff8a1e 58% 65%,#fff4e2 65% 72%,#147a44 72% 79%,#1f9d5a 79%)' }],
+      done: 'Quelle couleur ! On ne voit plus que nous dans la rue.', boss: "Tchrr… C'est criard, ton truc." },
+    { id: 'auvent', name: "Poser l'auvent", desc: 'Pour protéger les clients du soleil et de la pluie.', cost: 3, focus: [143, 124, 1.45],
+      styles: [{ n: 'Tôle bleue', sw: 'repeating-linear-gradient(90deg,#2e7fd0 0 8px,#2468b0 8px 11px)' },
+        { n: 'Bâche rayée', sw: 'repeating-linear-gradient(90deg,#e0413b 0 12px,#fff4e2 12px 24px)' },
+        { n: 'Paillote', sw: 'repeating-linear-gradient(80deg,#d9a54a 0 3px,#b9822e 3px 5px)' }],
+      done: "Même s'il pleut, les clients restent au sec maintenant." },
+    { id: 'comptoir', name: 'Construire le comptoir', desc: 'Une vieille planche sur deux cartons, ça ne va pas.', cost: 3, focus: [196, 198, 1.8],
+      styles: [{ n: 'Bois', sw: 'repeating-linear-gradient(0deg,#9a5d33 0 9px,#7d4a27 9px 11px)' },
+        { n: 'Carrelage', sw: 'repeating-conic-gradient(#2a78c2 0 25%,#fff4e2 0 50%) 0 0/18px 18px' },
+        { n: 'Zinc', sw: 'linear-gradient(135deg,#d7dde4,#8e99a6 55%,#c9d1db)' }],
+      done: 'Un vrai comptoir ! Je me sens comme une reine derrière.' },
+    { id: 'mobilier', name: 'Tables et chaises', desc: 'Il faut de quoi asseoir les clients sur le trottoir.', cost: 3, focus: [140, 232, 1.45],
+      styles: [{ n: 'Plastique coloré', sw: 'conic-gradient(#e0413b 0 25%,#2f6fd6 0 50%,#f2b21b 0 75%,#2aa36b 0)' },
+        { n: 'Bois', sw: 'linear-gradient(#a0683a,#7d4a27)' },
+        { n: 'Métal', sw: 'linear-gradient(135deg,#c9d1db,#7f8a97)' }],
+      done: 'Les premiers clients sont là ! Ils viennent de chez le Boss, hein…', boss: 'Mes clients ! Revenez ici !' },
+    { id: 'four', name: 'Le coin poulet braisé', desc: 'Un fût coupé, de la braise et du bon poulet.', cost: 3, focus: [34, 228, 2],
+      done: 'Le poulet braisé de Tantie, toute la rue va le sentir !' },
+    { id: 'lumieres', name: 'Les lumières', desc: 'La nuit, il faut que ça brille.', cost: 3, focus: [143, 150, 1.4],
+      styles: [{ n: 'Guirlande', sw: 'radial-gradient(circle at 20% 50%,#ffd23f 0 10%,transparent 11%),radial-gradient(circle at 50% 50%,#ff5ea2 0 10%,transparent 11%),radial-gradient(circle at 80% 50%,#3ddc9a 0 10%,transparent 11%),#261d50' },
+        { n: 'Lampions', sw: 'radial-gradient(ellipse 16% 30% at 28% 50%,#ff6a58 0 90%,transparent 100%),radial-gradient(ellipse 16% 30% at 72% 50%,#ff8a1e 0 90%,transparent 100%),#261d50' },
+        { n: 'Néons', sw: 'linear-gradient(transparent 32%,#62c9f3 32% 42%,transparent 42% 58%,#ff5ea2 58% 68%,transparent 68%),#261d50' }],
+      done: 'C\'est beau ! On dirait un vrai maquis de la Rue Princesse.' },
+    { id: 'ecran', name: "L'écran géant", desc: 'Les soirs de match, tout le quartier viendra.', cost: 4, focus: [82, 172, 1.9],
+      done: 'Avec cet écran, les matchs de la CAN se regarderont ici !', boss: "Un écran ?! Le mien est plus petit… pour l'instant." },
+    { id: 'dj', name: 'Le coin DJ', desc: "À la Rue Princesse, c'est la musique qui fait venir les gens.", cost: 4, focus: [252, 222, 1.9],
+      done: 'Le DJ est en place ! Coupé-décalé toute la nuit !' },
+    { id: 'enseigne', name: "L'enseigne", desc: 'Le nom du maquis en néon, visible de tout Yopougon.', cost: 4, focus: [143, 62, 1.8],
+      styles: [{ n: 'Néon rose', sw: 'radial-gradient(circle,#fff0f6 0 16%,#ff5ea2 40%,#1d1236 75%)' },
+        { n: 'Néon vert', sw: 'radial-gradient(circle,#effff7 0 16%,#3ddc9a 40%,#1d1236 75%)' },
+        { n: 'Néon bleu', sw: 'radial-gradient(circle,#effaff 0 16%,#4fc3ff 40%,#1d1236 75%)' }],
+      done: '« Tantie Yop » en lumière… Les gens vont venir de loin !', boss: 'Hmm. Le mien clignote plus fort.' },
+    { id: 'ouverture', name: 'La grande ouverture', desc: 'Tout est prêt. On invite toute la Rue Princesse !', cost: 3, focus: [200, 150, 1],
+      done: 'On a réussi ! Même le Boss est venu danser.', boss: 'Bon… vous avez gagné. Je peux avoir une table ce soir ?' },
+  ];
+
   /* ----- Progression ----- */
-  let progress = { stars: LEVELS.map(() => 0), sound: true, tasks: 0, intro: false };
-  function load() {
-    try {
-      const d = JSON.parse(localStorage.getItem(STORE) || 'null');
-      if (d && Array.isArray(d.stars)) {
-        progress.stars = LEVELS.map((_, i) => d.stars[i] | 0);
-        progress.sound = d.sound !== false;
-        progress.tasks = Math.min(TASKS.length, Math.max(0, d.tasks | 0));
-        progress.intro = !!d.intro;
-      }
-    } catch (e) {}
+  let progress = { stars: LEVELS.map(() => 0), sound: true, tasks: 0, tasks2: 0, styles: {}, intro: false, intro2: false };
+  function readProgress(d) {
+    if (!d || !Array.isArray(d.stars)) return;
+    progress.stars = LEVELS.map((_, i) => d.stars[i] | 0);
+    progress.sound = d.sound !== false;
+    progress.tasks = Math.min(TASKS.length, Math.max(0, d.tasks | 0));
+    progress.tasks2 = Math.min(TASKS2.length, Math.max(0, d.tasks2 | 0));
+    progress.styles = d.styles && typeof d.styles === 'object' ? d.styles : {};
+    progress.intro = !!d.intro; progress.intro2 = !!d.intro2;
   }
+  function load() { try { readProgress(JSON.parse(localStorage.getItem(STORE) || 'null')); } catch (e) {} }
   function save() { try { localStorage.setItem(STORE, JSON.stringify(progress)); } catch (e) {} }
 
   /* ----- Son ----- */
@@ -972,6 +1168,7 @@ const MM = (() => {
     tvOn: () => { tone(60, .12, 'sawtooth', .05); noiseF(.18, .06, 'highpass', 3000, 6000); },
     cheer: () => noiseF(.9, .1, 'bandpass', 900, 1400),
     zzz: () => tone(120, .1, 'sawtooth', .04),
+    boss: () => [0, .17, .34].forEach(t => tone(200, .12, 'square', .05, t, .75)),
     whistle: () => tone(520, .55, 'sine', .02, 0, 2.4),
     spend: () => [784, 1046.5].forEach((f, i) => tone(f, .16, 'triangle', .1, i * .08)),
     pow: () => { noiseF(.45, .2, 'lowpass', 1500, 120); tone(1200, .3, 'sine', .03, .05, .5); },
@@ -984,55 +1181,84 @@ const MM = (() => {
 
 
   /* ----- Maquis : économie et écran d'accueil ----- */
-  const unlocked = i => i === 0 || progress.stars[i - 1] > 0;
+  const CH1_END = 15;
+  const chDone = i => i === 0 ? progress.tasks : progress.tasks2;
+  const chComplete = i => chDone(i) >= CHAPTERS[i].tasks.length;
+  const unlocked = i => i === 0 || (progress.stars[i - 1] > 0 && (i < CH1_END || chComplete(0)));
   function nextLevel() { for (let i = 0; i < LEVELS.length; i++) if (unlocked(i) && !progress.stars[i]) return i; return -1; }
+  const GOAL_EMOJI = { flies: '🪰', crates: '📦', light: '💡', boss: '😎' };
   function goalIcon(g) {
     if (g.kind === 'collect') return `<span class="gi">${TYPES[g.t].e}</span>`;
     if (g.kind === 'dirt') return '<span class="gi gi-tache" aria-hidden="true"></span>';
-    return '<span class="gi">🪰</span>';
+    return `<span class="gi">${GOAL_EMOJI[g.kind]}</span>`;
   }
-  function goalText(g) { return g.kind === 'collect' ? `${g.n} ${TYPES[g.t].many}` : g.kind === 'dirt' ? 'tout le sol' : 'les mouches'; }
+  function goalText(g) {
+    if (g.kind === 'collect') return `${g.n} ${TYPES[g.t].many}`;
+    return { dirt: 'tout le sol', flies: 'les mouches', crates: 'tous les cartons', light: 'rallumer le courant', boss: 'battre Le Boss' }[g.kind];
+  }
+  function leftText(g) {
+    const n = g.left, s = n > 1 ? 's' : '';
+    if (g.kind === 'collect') return `${n} ${n > 1 ? TYPES[g.t].many : TYPES[g.t].one}`;
+    if (g.kind === 'dirt') return `${n} tache${s}`;
+    if (g.kind === 'flies') return `${n} mouche${s}`;
+    if (g.kind === 'crates') return `${n} carton${s}`;
+    if (g.kind === 'light') return `${n} case${s} dans le noir`;
+    return `${n} coup${s} pour battre Le Boss`;
+  }
   const earned = () => progress.stars.reduce((a, b) => a + b, 0);
-  const spent = () => TASKS.slice(0, progress.tasks).reduce((a, t) => a + t.cost, 0);
+  const spent = () => CHAPTERS.reduce((a, ch, i) => a + ch.tasks.slice(0, chDone(i)).reduce((x, t) => x + t.cost, 0), 0);
   const wallet = () => Math.max(0, earned() - spent());
   const lcFirst = s => s.charAt(0).toLowerCase() + s.slice(1);
-  const canRenovate = () => { const t = TASKS[progress.tasks]; return !!t && wallet() >= t.cost; };
+  const curChapter = () => chComplete(0) ? 1 : 0;
+  const canRenovate = () => { const c = curChapter(), t = CHAPTERS[c].tasks[chDone(c)]; return !!t && wallet() >= t.cost; };
+  let view = 0;
 
-  function say(text) {
-    const p = $('#tantieLine');
+  const AVATARS = { tantie: '👩🏾‍🍳', boss: '😎' };
+  function say(text, who) {
+    const p = $('#tantieLine'), av = $('#sayAvatar');
+    who = who || 'tantie';
+    av.textContent = AVATARS[who]; av.classList.toggle('boss', who === 'boss');
     p.textContent = text; p.classList.remove('say'); void p.offsetWidth; p.classList.add('say');
   }
   function homeLine() {
-    const t = TASKS[progress.tasks], w = wallet();
-    if (!t) return 'Le maquis est debout grâce à toi. Repose-toi un peu, la suite arrive bientôt !';
-    if (w >= t.cost) return progress.tasks === 0 ? "On a de quoi commencer ! Appuie sur « Rénover », on s'attaque au premier chantier."
+    const c = curChapter(), ch = CHAPTERS[c], t = ch.tasks[chDone(c)], w = wallet();
+    if (!t) return 'Le Boss est battu, la Rue Princesse est à nous ! Le chapitre 3 arrive bientôt.';
+    if (w >= t.cost) return chDone(c) === 0 ? `On a de quoi commencer ! Appuie sur « Rénover », on s'attaque au premier chantier.`
       : `On a assez d'étoiles. Allez, on s'attaque à « ${lcFirst(t.name)} » !`;
     const miss = t.cost - w;
+    if (c === 0 && nextLevel() < 0) return `Il nous manque ${miss} étoile${miss > 1 ? 's' : ''}. Rejoue des niveaux pour gagner plus d'étoiles : la Rue Princesse nous attend !`;
     return `Il nous manque ${miss} étoile${miss > 1 ? 's' : ''} pour « ${lcFirst(t.name)} ». Va gagner un niveau, je t'attends ici.`;
   }
+  function renderTabs() {
+    const box = $('#chTabs');
+    if (!chComplete(0)) { box.innerHTML = '<span class="chip">Chapitre 1 · Chez Tantie</span>'; return; }
+    box.innerHTML = CHAPTERS.map((ch, i) => `<button class="chip tab" data-view="${i}" aria-pressed="${view === i}">${i + 1} · ${ch.name}</button>`).join('');
+  }
   function renderHome(keepLine) {
-    applyScene(progress.tasks);
-    setCam({ x: 200, y: 150, s: 1 });
-    const w = wallet(), t = TASKS[progress.tasks], nx = nextLevel(), btn = $('#renoBtn');
+    const c = curChapter();
+    view = Math.min(view, c);
+    const ch = CHAPTERS[view], n = chDone(view), t = ch.tasks[n], w = wallet(), btn = $('#renoBtn');
+    ch.build(); applyScene(view, n); setCam({ x: 200, y: 150, s: 1 });
+    renderTabs();
     $('#wallet').textContent = `★ ${w}`;
-    $('#renoCount').textContent = `${progress.tasks}/${TASKS.length}`;
-    $('#renoFill').style.width = (progress.tasks / TASKS.length * 100) + '%';
+    $('#renoCount').textContent = `${n}/${ch.tasks.length}`;
+    $('#renoFill').style.width = (n / ch.tasks.length * 100) + '%';
     if (t) {
-      $('#taskKicker').textContent = `Chantier ${progress.tasks + 1} sur ${TASKS.length}`;
-      $('#taskName').textContent = t.name; $('#taskDesc').textContent = t.desc;
+      $('#taskKicker').textContent = `Chantier ${n + 1} sur ${ch.tasks.length}`;
+      $('#taskName').textContent = t.name; $('#taskDesc').textContent = t.styles ? `${t.desc} Tu choisis le style.` : t.desc;
       btn.hidden = false; btn.disabled = w < t.cost; btn.classList.toggle('ready', w >= t.cost);
       btn.innerHTML = w >= t.cost ? `Rénover<small>${t.cost} ★</small>` : `${t.cost} ★<small>il en manque ${t.cost - w}</small>`;
     } else {
-      $('#taskKicker').textContent = 'Chapitre 1 terminé';
-      $('#taskName').textContent = 'Le maquis est sauvé !';
-      $('#taskDesc').textContent = 'Chapitre 2 : un deuxième maquis à Yopougon. Bientôt.';
+      $('#taskKicker').textContent = `Chapitre ${view + 1} terminé`;
+      $('#taskName').textContent = view === 0 ? 'Le maquis de Tantie est sauvé !' : 'La Rue Princesse est à nous !';
+      $('#taskDesc').textContent = view === 0 ? (c === 1 ? 'Direction la Rue Princesse, à Yopougon.' : '') : 'Chapitre 3 : un maquis de plage à Grand-Bassam. Bientôt.';
       btn.hidden = true;
     }
-    if (!keepLine) say(homeLine());
-    const cta = $('#playNext');
+    if (!keepLine) say(view === c ? homeLine() : 'Tu te souviens comment c\'était au début ? Regarde-moi ce maquis maintenant !');
+    const nx = nextLevel(), cta = $('#playNext');
     if (nx >= 0) { cta.textContent = `Jouer · Niveau ${nx + 1}`; cta.dataset.lvl = nx; }
     else { cta.textContent = 'Rejouer un niveau'; cta.dataset.lvl = -1; }
-    $('#taskList').innerHTML = TASKS.map((x, i) => `<li class="${i < progress.tasks ? 'ok' : i === progress.tasks ? 'next' : ''}"><span>${x.name}</span><b>${i < progress.tasks ? '✓' : x.cost + ' ★'}</b></li>`).join('');
+    $('#taskList').innerHTML = ch.tasks.map((x, i) => `<li class="${i < n ? 'ok' : i === n ? 'next' : ''}"><span>${x.name}</span><b>${i < n ? '✓' : x.cost + ' ★'}</b></li>`).join('');
     soundLabels();
   }
   function soundLabels() { const t = progress.sound ? 'Son : oui' : 'Son : non'; $('#soundHome').textContent = t; $('#soundGame').textContent = t; }
@@ -1084,7 +1310,7 @@ const MM = (() => {
     </g>`;
   }
 
-  function buildScene() {
+  function buildScene1() {
     lcg = 7;
     let stars = '';
     for (let i = 0; i < 28; i++) {
@@ -1328,7 +1554,7 @@ const MM = (() => {
     const f = { ...cam };
     return tween(ms, e => setCam({ x: f.x + (x - f.x) * e, y: f.y + (y - f.y) * e, s: f.s + (s - f.s) * e }));
   }
-  const applyScene = n => sceneEl.setAttribute('class', TASKS.slice(0, n).map(t => 'd-' + t.id).join(' '));
+  const applyScene = (c, n) => sceneEl.setAttribute('class', 'ch' + (c + 1) + ' ' + CHAPTERS[c].tasks.slice(0, n).map(t => 'd-' + t.id).join(' '));
   const addDone = id => sceneEl.classList.add('d-' + id);
   const svgEl = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
   function anim(el, cls, delay) { if (!el) return; el.style.animationDelay = (delay || 0) + 's'; el.classList.add(cls); }
@@ -1372,13 +1598,14 @@ const MM = (() => {
   }
   function tantieHappy() {
     const b = Q('.t-body'), a = Q('.t-arm');
+    if (!b || !a) return;
     b.classList.remove('a-hop'); a.classList.remove('a-wave'); void sceneEl.getBoundingClientRect();
     b.classList.add('a-hop'); a.classList.add('a-wave');
     setTimeout(() => { b.classList.remove('a-hop'); a.classList.remove('a-wave'); }, 2100);
   }
 
   /* ----- Les 11 chantiers, animés ----- */
-  const ANIM = {
+  const ANIM1 = {
     async balai() {
       const items = QA('.trash .tr');
       items.forEach((el, i) => setTimeout(() => { const b = el.getBBox(); el.classList.add('a-fly'); puff(b.x + b.width / 2, b.y + b.height / 2, 2); sfx.whoosh(); }, i * 150));
@@ -1478,53 +1705,531 @@ const MM = (() => {
     },
   };
 
+  /* ----- Chapitre 2 : la Rue Princesse ----- */
+  function sitter(cx, skin, shirt, top, cls) {
+    const head = top === 'cap' ? `<path d="M${cx - 7.4} 205.5 a7.4 7.4 0 0 1 14.8 0z" fill="${shirt}"/><rect x="${cx - 1}" y="203.8" width="10.5" height="2.3" rx="1.1" fill="${shirt}"/>`
+      : top === 'scarf' ? `<path d="M${cx - 7.8} 206 q0 -10.5 7.8 -10.5 q7.8 0 7.8 10.5 q-7.8 -4 -15.6 0z" fill="#ff8a1e"/><circle cx="${cx + 6.5}" cy="198" r="2.4" fill="#ff8a1e"/>`
+      : `<path d="M${cx - 7.2} 205.6 a7.2 7.2 0 0 1 14.4 0 q-7.2 -3.4 -14.4 0z" fill="#1a1437"/>`;
+    return `<g class="cust ${cls}"><g class="bob">
+      <rect x="${cx - 5.5}" y="236" width="4.6" height="14" rx="2" fill="#2b2340"/><rect x="${cx + 0.9}" y="236" width="4.6" height="14" rx="2" fill="#2b2340"/>
+      <rect x="${cx - 7.5}" y="215" width="15" height="23" rx="6" fill="${shirt}"/>
+      <circle cx="${cx}" cy="207" r="7.3" fill="${skin}"/>${head}
+      <circle cx="${cx - 2.5}" cy="208" r=".95" fill="#1a1437"/><circle cx="${cx + 2.5}" cy="208" r=".95" fill="#1a1437"/>
+      <path d="M${cx - 2.2} 211 q2.2 1.8 4.4 0" stroke="#1a1437" stroke-width="1" fill="none" stroke-linecap="round"/>
+    </g></g>`;
+  }
+  function watcher(cx, skin, shirt, cls) {
+    return `<g class="cust ${cls}"><g class="bob">
+      <path d="M${cx - 10} 222 v-20 q0 -9 10 -9 q10 0 10 9 v20z" fill="${shirt}"/>
+      <circle cx="${cx}" cy="185" r="7.5" fill="${skin}"/>
+      <path d="M${cx - 7.5} 184 a7.5 7.5 0 0 1 15 0 q-7.5 -2 -15 0z" fill="#1a1437"/>
+      <path d="M${cx - 10} 200 l-6 -14 M${cx + 10} 200 l6 -14" stroke="${skin}" stroke-width="3.6" stroke-linecap="round"/>
+    </g></g>`;
+  }
+  function tantieSvg(x, y) {
+    return `<g transform="translate(${x} ${y})"><g class="tantie"><g class="t-body">
+    <path d="M-17 190 q0 -27 17 -27 q17 0 17 27z" fill="url(#pPagne2)"/>
+    <path d="M-8 171 h16 l2 19 h-20z" fill="#fff4e2"/>
+    <path d="M-15 171 q-6 8 -2 16" stroke="#7a4a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <rect x="-3" y="157" width="6" height="7" fill="#7a4a2e"/>
+    <circle cx="0" cy="150" r="10.5" fill="#7a4a2e"/>
+    <path d="M-11.6 148 q0 -15.5 11.6 -15.5 q11.6 0 11.6 15.5 q-11.6 -6 -23.2 0z" fill="#ff5ea2"/>
+    <path d="M-9 137 q9 -12 18 0 q-9 -4 -18 0z" fill="#ff5ea2"/>
+    <path d="M6 135 q9 -9 13 -1 q-5 3 -13 1z" fill="#e0428a"/>
+    <circle cx="-5" cy="141" r="1.2" fill="#ffd23f"/><circle cx="3" cy="138" r="1.2" fill="#ffd23f"/><circle cx="7" cy="143" r="1.2" fill="#ffd23f"/>
+    <circle cx="-3.8" cy="151" r="1.3" fill="#1a1437"/><circle cx="3.8" cy="151" r="1.3" fill="#1a1437"/>
+    <path d="M-3.6 155.5 q3.6 3 7.2 0" stroke="#1a1437" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+    <circle cx="-10.6" cy="154" r="1.6" fill="#ffd23f"/><circle cx="10.6" cy="154" r="1.6" fill="#ffd23f"/>
+    <g class="t-arm"><path d="M14 169 q8 -4 11 -14" stroke="#7a4a2e" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="25" cy="154" r="3" fill="#7a4a2e"/></g>
+  </g></g></g>`;
+  }
+  function bossSvg(cx, cls, dancing) {
+    const arms = dancing
+      ? `<path d="M${cx - 8} 212 L${cx - 18} 196 M${cx + 8} 212 L${cx + 18} 196" stroke="#5a341d" stroke-width="4.2" stroke-linecap="round"/>`
+      : `<rect x="${cx - 11}" y="214" width="22" height="7" rx="3.5" fill="#f4efe6"/><rect x="${cx - 9}" y="216" width="18" height="4" rx="2" fill="#5a341d"/>`;
+    return `<g class="${cls}">
+      <rect x="${cx - 7}" y="234" width="6" height="20" rx="2.5" fill="#1d1830"/><g class="boss-foot"><rect x="${cx + 1}" y="234" width="6" height="20" rx="2.5" fill="#1d1830"/><rect x="${cx + 1}" y="251" width="9" height="4" rx="2" fill="#0d0a1a"/></g>
+      <rect x="${cx - 9}" y="251" width="9" height="4" rx="2" fill="#0d0a1a"/>
+      <path d="M${cx - 12} 236 v-24 q0 -9 12 -9 q12 0 12 9 v24z" fill="#f4efe6"/>
+      <path d="M${cx - 5} 204 l5 9 l5 -9" fill="#5a341d"/>
+      <path d="M${cx - 5.5} 205 q5.5 10 11 0" stroke="#ffd23f" stroke-width="1.6" fill="none"/><circle cx="${cx}" cy="211" r="1.8" fill="#ffd23f"/>
+      ${arms}
+      <rect x="${cx - 3}" y="197" width="6" height="7" fill="#5a341d"/>
+      <circle cx="${cx}" cy="191" r="8.6" fill="#5a341d"/>
+      <rect x="${cx - 7.5}" y="188" width="15" height="4.6" rx="2" fill="#0d0a1a"/><rect x="${cx - 6}" y="189" width="4" height="1.2" fill="#62c9f3" opacity=".7"/>
+      <path d="M${cx - 3} 196.5 q3 1.6 6 0" stroke="#0d0a1a" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <path d="M${cx - 13} 184 h26 l-2 -2 h-4 l-1 -8 q-6 -3 -12 0 l-1 8 h-4z" fill="#15101f"/><rect x="${cx - 7}" y="180" width="14" height="2" fill="#ffd23f"/>
+    </g>`;
+  }
+
+  function buildScene2() {
+    const st = progress.styles || {}, V = id => st[id] | 0;
+    lcg = 11;
+    let stars = '', far = '', dashes = '', tiles = '';
+    for (let i = 0; i < 24; i++) stars += `<circle cx="${f1(rr(4, 396))}" cy="${f1(rr(4, 60))}" r="${rr(.5, 1.2).toFixed(2)}" fill="#fff4e2" opacity="${rr(.35, .85).toFixed(2)}"${i % 3 === 0 ? ` class="twk" style="animation-delay:${rr(0, 3).toFixed(2)}s"` : ''}/>`;
+    const blds = [[0, 112, 36], [32, 92, 34], [62, 128, 44], [102, 84, 34], [132, 104, 46], [174, 78, 30], [200, 112, 42], [238, 90, 34], [268, 100, 36], [300, 70, 40], [336, 104, 36], [368, 86, 34]];
+    for (const [x, y, w] of blds) {
+      far += `<rect x="${x}" y="${y}" width="${w}" height="${222 - y}" fill="#241a4c"/>`;
+      for (let wy = y + 8; wy < 214; wy += 13) for (let wx = x + 5; wx < x + w - 6; wx += 9) if (rr(0, 1) < .3) far += `<rect x="${wx}" y="${wy}" width="4" height="5" fill="${rr(0, 1) < .8 ? '#ffd23f' : '#ff5ea2'}" opacity="${rr(.2, .45).toFixed(2)}"/>`;
+    }
+    for (let x = 6; x < 400; x += 40) dashes += `<rect x="${x}" y="279" width="20" height="2" rx="1" fill="#4a3f72"/>`;
+    for (let x = 0; x < 400; x += 20) tiles += `<path d="M${x} 222 V254" stroke="#463b6c" stroke-width=".8"/>`;
+
+    // façade
+    const FAC = [['#e8773a', '#c45a24'], ['#2a78c2', '#1d5b98'], ['#1f9d5a', '#147a44']][V('facade')];
+    const band = [`<rect x="8" y="100" width="270" height="10" fill="url(#pWax2)"/>`,
+      `<rect x="8" y="100" width="270" height="10" fill="#fff4e2"/>${Array.from({ length: 27 }, (_, i) => `<circle cx="${13 + i * 10}" cy="105" r="2" fill="#2a78c2"/>`).join('')}`,
+      `<rect x="8" y="100" width="270" height="3.4" fill="#ff8a1e"/><rect x="8" y="103.4" width="270" height="3.3" fill="#fff4e2"/><rect x="8" y="106.7" width="270" height="3.3" fill="#147a44"/>`][V('facade')];
+
+    // auvent
+    let awn = '';
+    const av = V('auvent');
+    if (av === 0) {
+      awn = `<path d="M4 114 H282 L278 134 H8 Z" fill="#2e7fd0"/>`;
+      for (let x = 10; x < 280; x += 9) awn += `<path d="M${x} 114.5 L${x - .5} 133.5" stroke="#2468b0" stroke-width="2"/>`;
+      awn += `<rect x="8" y="132" width="270" height="3" fill="#1d5590"/>`;
+    } else if (av === 1) {
+      awn = `<rect x="4" y="114" width="278" height="18" fill="url(#pStripe2)"/>`;
+      for (let i = 0, x = 4; x < 282; x += 13, i++) awn += `<path d="M${x} 131.5 a6.5 6.5 0 0 0 13 0z" fill="${i % 2 ? '#fff4e2' : '#e0413b'}"/>`;
+      awn += `<rect x="4" y="113" width="278" height="2.5" fill="#a82c27"/>`;
+    } else {
+      awn = `<path d="M2 116 H284 L280 132 H6 Z" fill="#d9a54a"/>`;
+      for (let x = 4; x < 282; x += 3.4) awn += `<path d="M${f1(x)} ${f1(118 + rr(0, 4))} L${f1(x + rr(-1.5, 1.5))} ${f1(136 + rr(0, 6))}" stroke="${rr(0, 1) < .5 ? '#b9822e' : '#e6bd6a'}" stroke-width="1.6"/>`;
+    }
+    const pole = av === 2 ? '#c9a15a' : '#3a3046';
+    awn += `<rect x="9" y="130" width="5" height="124" fill="${pole}"/><rect x="272" y="130" width="5" height="124" fill="${pole}"/>`;
+    if (av === 2) awn += `<path d="M9 160 h5 M9 195 h5 M9 228 h5 M272 160 h5 M272 195 h5 M272 228 h5" stroke="#9a7638" stroke-width="2"/>`;
+
+    // comptoir
+    const cv = V('comptoir');
+    const barFill = ['url(#pWood2)', 'url(#pAzul2)', 'url(#gZinc2)'][cv], barTop = ['#a8693c', '#f4efe6', '#e3e8ee'][cv];
+
+    // mobilier
+    const mv = V('mobilier');
+    const chairCols = [['#e0413b', '#2f6fd6', '#f2b21b', '#2aa36b'], ['#8b5a2b', '#8b5a2b', '#8b5a2b', '#8b5a2b'], ['#9aa4b1', '#9aa4b1', '#9aa4b1', '#9aa4b1']][mv];
+    const tTop = ['#f4efe6', '#a0683a', '#c9d1db'][mv], tLeg = ['#e4ddd0', '#7d4a27', '#7f8a97'][mv];
+    const chairsX = [74, 126, 154, 206];
+    const table2 = cx => `<g class="tb"><rect x="${cx - 25}" y="227" width="50" height="5" rx="2.5" fill="${tTop}"/><rect x="${cx - 25}" y="232" width="50" height="2" fill="#000" opacity=".15"/><rect x="${cx - 20}" y="234" width="3" height="18" fill="${tLeg}"/><rect x="${cx + 17}" y="234" width="3" height="18" fill="${tLeg}"/></g>`;
+
+    // lumières
+    const lv = V('lumieres');
+    let lights = '';
+    if (lv === 0) {
+      lights = `<path d="M12 138 Q143 158 274 138" stroke="#1d1830" stroke-width="1.2" fill="none"/>`;
+      for (let i = 0; i < 12; i++) {
+        const t = (i + 1) / 13, x = (1 - t) * (1 - t) * 12 + 2 * (1 - t) * t * 143 + t * t * 274, y = 138 + 2 * t * (1 - t) * 20, col = BULBS[i % BULBS.length];
+        lights += `<g class="bulb lt" style="animation-delay:${(i * .37 % 2.6).toFixed(2)}s"><circle cx="${f1(x)}" cy="${f1(y + 4)}" r="6.5" fill="${col}" opacity=".22"/><circle cx="${f1(x)}" cy="${f1(y + 4)}" r="3.1" fill="${col}"/></g>`;
+      }
+    } else if (lv === 1) {
+      for (let i = 0; i < 7; i++) {
+        const x = 30 + i * 37.5, col = i % 2 ? '#ff8a1e' : '#ff6a58';
+        lights += `<g class="lamp lt" style="animation-delay:${(i * .4).toFixed(1)}s"><path d="M${x} 134 v6" stroke="#1d1830" stroke-width="1"/><ellipse cx="${x}" cy="150" rx="14" ry="14" fill="${col}" opacity=".18"/><ellipse cx="${x}" cy="150" rx="7" ry="9.5" fill="${col}"/><ellipse cx="${x}" cy="150" rx="3.6" ry="7" fill="#ffe2a8" opacity=".75"/><rect x="${x - 4}" y="139.5" width="8" height="2.2" rx="1" fill="#2b2340"/><rect x="${x - 4}" y="158.5" width="8" height="2.2" rx="1" fill="#2b2340"/></g>`;
+      }
+    } else {
+      lights = `<g class="lt"><rect x="30" y="138" width="92" height="3.6" rx="1.8" fill="#62c9f3" filter="url(#fGlow2)"/></g>
+        <g class="lt"><rect x="164" y="138" width="92" height="3.6" rx="1.8" fill="#ff5ea2" filter="url(#fGlow2)"/></g>
+        <g class="lt"><rect x="16" y="146" width="3.4" height="64" rx="1.7" fill="#ff5ea2" filter="url(#fGlow2)"/></g>
+        <g class="lt"><rect x="267" y="146" width="3.4" height="64" rx="1.7" fill="#62c9f3" filter="url(#fGlow2)"/></g>`;
+    }
+
+    // enseigne
+    const nv = V('enseigne'), neon = ['#ff5ea2', '#3ddc9a', '#4fc3ff'][nv], core = ['#fff0f6', '#effff7', '#effaff'][nv];
+
+    let bottles = '';
+    const bc = ['#3ddc9a', '#ff5ea2', '#ffd23f', '#62c9f3', '#ff8a1e', '#b18cff', '#3ddc9a', '#ffd23f', '#ff5ea2', '#62c9f3'];
+    for (let i = 0; i < 10; i++) { const x = 154 + i * 9; bottles += `<rect x="${x}" y="146" width="5" height="11" rx="1.5" fill="${bc[i]}" opacity=".85"/><rect x="${x + 1.5}" y="142.5" width="2" height="4" fill="${bc[i]}" opacity=".85"/>`; }
+
+    sceneEl.innerHTML = `
+<defs>
+  <linearGradient id="gSky2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0e0a26"/><stop offset=".55" stop-color="#2a1550"/><stop offset="1" stop-color="#6a2a6e"/></linearGradient>
+  <radialGradient id="gCity2" cx=".5" cy="1" r=".7"><stop offset="0" stop-color="#ff5ea2" stop-opacity=".35"/><stop offset="1" stop-color="#ff5ea2" stop-opacity="0"/></radialGradient>
+  <linearGradient id="gWarm2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffcf7a" stop-opacity=".55"/><stop offset="1" stop-color="#ffcf7a" stop-opacity=".12"/></linearGradient>
+  <linearGradient id="gRival2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffcf7a" stop-opacity=".45"/><stop offset="1" stop-color="#ffcf7a" stop-opacity=".1"/></linearGradient>
+  <linearGradient id="gZinc2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d7dde4"/><stop offset=".55" stop-color="#8e99a6"/><stop offset="1" stop-color="#c9d1db"/></linearGradient>
+  <radialGradient id="gEmber2"><stop offset="0" stop-color="#fff2a8"/><stop offset=".45" stop-color="#ff8a1e"/><stop offset="1" stop-color="#b62d18"/></radialGradient>
+  <pattern id="pWax2" width="18" height="10" patternUnits="userSpaceOnUse"><rect width="18" height="10" fill="#17807f"/><circle cx="9" cy="5" r="4" fill="#ffd23f"/><circle cx="9" cy="5" r="2" fill="#e2483a"/><circle cx="0" cy="5" r="2" fill="#ff5ea2"/><circle cx="18" cy="5" r="2" fill="#ff5ea2"/></pattern>
+  <pattern id="pPagne2" width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" fill="#2f6fd6"/><circle cx="4.5" cy="4.5" r="2.8" fill="#ffd23f"/><circle cx="4.5" cy="4.5" r="1.2" fill="#ff5ea2"/></pattern>
+  <pattern id="pStripe2" width="26" height="18" patternUnits="userSpaceOnUse"><rect width="13" height="18" fill="#e0413b"/><rect x="13" width="13" height="18" fill="#fff4e2"/></pattern>
+  <pattern id="pStripeG2" width="16" height="12" patternUnits="userSpaceOnUse"><rect width="8" height="12" fill="#2aa36b"/><rect x="8" width="8" height="12" fill="#e9f6ee"/></pattern>
+  <pattern id="pWood2" width="12" height="7" patternUnits="userSpaceOnUse"><rect width="12" height="7" fill="#9a5d33"/><rect y="5.5" width="12" height="1.5" fill="#7d4a27"/></pattern>
+  <pattern id="pAzul2" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" fill="#fff4e2"/><rect width="5" height="5" fill="#2a78c2"/><rect x="5" y="5" width="5" height="5" fill="#2a78c2"/><circle cx="5" cy="5" r="1.4" fill="#ffd23f"/></pattern>
+  <pattern id="pPitch2" width="8" height="30" patternUnits="userSpaceOnUse"><rect width="8" height="30" fill="#2e9d4e"/><rect width="4" height="30" fill="#37ac59"/></pattern>
+  <clipPath id="yClipWall"><rect id="yWallReveal" x="4" y="22" width="0" height="202"/></clipPath>
+  <filter id="fGlow2" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<g id="cam">
+  <rect width="400" height="300" fill="url(#gSky2)"/>
+  ${stars}
+  <rect y="120" width="400" height="110" fill="url(#gCity2)"/>
+  ${far}
+
+  <g class="rival">
+    <rect x="286" y="62" width="114" height="160" fill="#234a36"/>
+    <rect x="282" y="58" width="118" height="6" fill="#1a3828"/>
+    <rect x="296" y="108" width="14" height="12" fill="#ffd23f" opacity=".3"/><rect x="376" y="108" width="14" height="12" fill="#ffd23f" opacity=".2"/>
+    <rect x="296" y="138" width="96" height="84" fill="#3a2a1a"/>
+    <rect x="296" y="138" width="96" height="84" fill="url(#gRival2)"/>
+    <circle cx="322" cy="196" r="6" fill="#1a1437" opacity=".7"/><rect x="315" y="202" width="14" height="20" rx="5" fill="#1a1437" opacity=".7"/>
+    <circle cx="368" cy="194" r="6" fill="#1a1437" opacity=".7"/><rect x="361" y="200" width="14" height="22" rx="5" fill="#1a1437" opacity=".7"/>
+    <rect x="284" y="122" width="116" height="12" fill="url(#pStripeG2)"/>
+    <g class="boss-neon">
+      <rect x="298" y="72" width="92" height="28" rx="7" fill="#0f2018"/>
+      <rect x="298" y="72" width="92" height="28" rx="7" fill="none" stroke="#3ddc9a" stroke-width="2.2" filter="url(#fGlow2)"/>
+      <text x="344" y="91.5" text-anchor="middle" font-family="Bungee, Impact, 'Arial Black', sans-serif" font-size="13" fill="#effff7" textLength="70" lengthAdjust="spacingAndGlyphs" filter="url(#fGlow2)">LE BOSS</text>
+    </g>
+  </g>
+
+  <g class="yo-wall-old">
+    <rect x="8" y="28" width="270" height="194" fill="#6c6680"/>
+    <rect x="4" y="24" width="278" height="6" fill="#57526a"/>
+    <path d="M86 94 q14 -6 26 3 q-4 12 -16 10 q-12 -2 -10 -13z M168 30 q12 -2 18 6 q-5 9 -14 7 q-8 -3 -4 -13z" fill="#7d7792"/>
+    <path d="M130 32 l6 12 l-5 8 l8 11 M248 86 l-7 9 l5 7 l-6 10" stroke="#48435a" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M214 96 q6 -8 12 0 t12 0 t12 0" stroke="#3ddc9a" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    <path d="M222 106 l6 -8 l5 8 l5 -8" stroke="#ffd23f" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <rect x="234" y="44" width="20" height="26" fill="#d9cfa8" opacity=".55" transform="rotate(6 244 57)"/>
+  </g>
+  <g class="yo-wall-new yo-new">
+    <rect x="8" y="28" width="270" height="194" fill="${FAC[0]}"/>
+    <rect x="4" y="24" width="278" height="6" fill="${FAC[1]}"/>
+    ${band}
+  </g>
+  <g class="roller"><rect x="-4" y="-15" width="10" height="30" rx="4" fill="${FAC[0]}" stroke="#fff4e2" stroke-width="1.5"/><path d="M6 0 h11 v24" stroke="#3a2f5e" stroke-width="2.5" fill="none" stroke-linecap="round"/><rect x="14" y="22" width="6" height="14" rx="2" fill="#ffd23f"/></g>
+
+  <rect x="24" y="40" width="44" height="42" rx="2" fill="#3a2b25"/><rect x="28" y="44" width="36" height="34" fill="#1b1230"/><rect x="28" y="44" width="36" height="34" fill="#ffcf7a" opacity=".35"/><path d="M46 44 V78 M28 61 H64" stroke="#3a2b25" stroke-width="2"/>
+  <rect x="218" y="40" width="44" height="42" rx="2" fill="#3a2b25"/><rect x="222" y="44" width="36" height="34" fill="#1b1230"/><path d="M240 44 V78 M222 61 H258" stroke="#3a2b25" stroke-width="2"/><path d="M222 44 q8 18 0 34 M258 44 q-8 18 0 34" fill="#ff5ea2" opacity=".55"/>
+
+  <rect x="26" y="136" width="234" height="86" fill="#2d2140"/>
+  <rect x="26" y="196" width="234" height="26" fill="#382a4e"/>
+  <rect class="yo-lit yo-new" x="26" y="136" width="234" height="86" fill="url(#gWarm2)"/>
+  <g class="yo-screen yo-new">
+    <rect x="70" y="140" width="14" height="6" fill="#121018"/>
+    <rect x="38" y="146" width="88" height="50" rx="3" fill="#121018"/>
+    <g class="tv-screen">
+      <rect x="41" y="149" width="82" height="44" fill="url(#pPitch2)"/>
+      <path d="M82 149 V193" stroke="#c8f0d2" stroke-width=".8"/><circle cx="82" cy="171" r="7" fill="none" stroke="#c8f0d2" stroke-width=".8"/>
+      <rect x="54" y="160" width="3.4" height="6" fill="#ff8a1e"/><rect x="62" y="176" width="3.4" height="6" fill="#ff8a1e"/><rect x="96" y="158" width="3.4" height="6" fill="#fff4e2"/><rect x="106" y="174" width="3.4" height="6" fill="#fff4e2"/>
+      <circle class="ball" cx="82" cy="173" r="1.6" fill="#ffffff"/>
+    </g>
+    <rect x="41" y="149" width="82" height="12" fill="#ffffff" opacity=".07"/>
+  </g>
+  ${watcher(62, '#6b3f24', '#62c9f3', 'yk5')}${watcher(104, '#8a5636', '#ffd23f', 'yk6')}
+  <rect x="148" y="158" width="100" height="3" fill="#6b3d22"/>
+  <g class="yo-bar-new yo-new">${bottles}</g>
+  ${tantieSvg(198, 18)}
+  <g class="yo-bar-old">
+    <rect x="156" y="200" width="22" height="22" fill="#b0844f"/><rect x="216" y="200" width="22" height="22" fill="#b0844f"/>
+    <rect x="165" y="200" width="4" height="22" fill="#d9bb86"/><rect x="225" y="200" width="4" height="22" fill="#d9bb86"/>
+    <rect x="148" y="195" width="98" height="5" fill="#8a6a48" transform="rotate(-2 197 197)"/>
+  </g>
+  <g class="yo-bar-new yo-new">
+    <rect x="148" y="194" width="96" height="28" fill="${barFill}"/>
+    <rect x="144" y="188" width="104" height="6" rx="2" fill="${barTop}"/>
+    <rect x="148" y="194" width="96" height="2" fill="#000" opacity=".18"/>
+  </g>
+
+  <g class="yo-shutter" style="transform-box:fill-box;transform-origin:50% 0">
+    <rect x="26" y="136" width="234" height="86" fill="#8a8fa0"/>
+    ${Array.from({ length: 16 }, (_, i) => `<path d="M26 ${141 + i * 5} H260" stroke="#6f7385" stroke-width="1.2"/>`).join('')}
+    <ellipse cx="60" cy="170" rx="16" ry="8" fill="#a0603a" opacity=".55"/><ellipse cx="220" cy="196" rx="20" ry="7" fill="#a0603a" opacity=".5"/>
+    <path d="M196 156 q8 -10 16 0 t16 0" stroke="#ff5ea2" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    <rect x="138" y="210" width="10" height="9" rx="2" fill="#4b4560"/><path d="M140 210 v-3 a3 3 0 0 1 6 0 v3" stroke="#4b4560" stroke-width="1.6" fill="none"/>
+  </g>
+
+  <g class="yo-awn-old">
+    <path d="M4 112 L282 118 L278 136 Q240 130 220 140 Q180 128 150 138 Q110 130 80 141 Q40 132 8 138 Z" fill="#8a7f70"/>
+    <ellipse cx="60" cy="122" rx="9" ry="3.6" fill="#2a1d48"/><ellipse cx="190" cy="126" rx="12" ry="4" fill="#2a1d48"/><ellipse cx="250" cy="124" rx="6" ry="3" fill="#2a1d48"/>
+    <rect x="10" y="130" width="5" height="124" fill="#5a4a3a" transform="rotate(4 12 254)"/>
+  </g>
+  <g class="yo-awn-new yo-new">${awn}</g>
+
+  <g class="yo-sign-old"><g transform="rotate(-4 143 62)">
+    <path d="M110 34 V44 M176 34 V44" stroke="#3d3126" stroke-width="2.4"/>
+    <rect x="84" y="42" width="118" height="40" rx="3" fill="#5a4a3a" stroke="#3d3126" stroke-width="1.5"/>
+    <text x="143" y="69" text-anchor="middle" font-family="Bungee, Impact, 'Arial Black', sans-serif" font-size="17" fill="#8a7a66" textLength="80" lengthAdjust="spacingAndGlyphs">B  R</text>
+  </g></g>
+  <g class="yo-sign-new yo-new">
+    <rect x="72" y="36" width="142" height="50" rx="11" fill="#1d1236"/>
+    <rect x="72" y="36" width="142" height="50" rx="11" fill="none" stroke="${neon}" stroke-width="2.6" filter="url(#fGlow2)"/>
+    <text x="143" y="61" text-anchor="middle" font-family="Bungee, Impact, 'Arial Black', sans-serif" font-size="19" fill="${core}" textLength="108" lengthAdjust="spacingAndGlyphs" filter="url(#fGlow2)">TANTIE</text>
+    <text x="143" y="78" text-anchor="middle" font-family="Bungee, Impact, 'Arial Black', sans-serif" font-size="10" fill="${neon}" textLength="62" lengthAdjust="spacingAndGlyphs" filter="url(#fGlow2)">· YOP ·</text>
+  </g>
+
+  <g class="yo-lights-old"><path d="M143 134 v10" stroke="#1d1830" stroke-width="1"/><g class="bulb"><circle cx="143" cy="147" r="7" fill="#fff6c2" opacity=".18"/><circle cx="143" cy="147" r="3" fill="#fff6c2"/></g></g>
+  <g class="yo-lights-new yo-new">${lights}</g>
+
+  <rect y="222" width="400" height="34" fill="#3a3058"/>
+  ${tiles}
+  <rect y="254" width="400" height="3" fill="#4a3f72"/>
+  <rect y="257" width="400" height="43" fill="#1c1631"/>
+  ${dashes}
+
+  <g class="yo-junk">
+    <g class="tr"><rect x="30" y="226" width="24" height="22" fill="#b0844f"/><rect x="39" y="226" width="5" height="22" fill="#d9bb86"/></g>
+    <g class="tr"><rect x="50" y="206" width="22" height="20" fill="#a37746"/><rect x="58" y="206" width="5" height="20" fill="#d9bb86"/></g>
+    <g class="tr"><rect x="58" y="226" width="24" height="22" fill="#b98c55"/></g>
+    <g class="tr"><path d="M96 250 q-4 -16 8 -18 q12 2 8 18z" fill="#1d1830"/><path d="M104 232 l-2 -4 l4 0z" fill="#1d1830"/></g>
+    <g class="tr"><path d="M112 160 h64 v20 h-64z" fill="#fff4e2" stroke="#c23b3b" stroke-width="1.6"/><text x="144" y="174.5" text-anchor="middle" font-family="Bungee, Impact, 'Arial Black', sans-serif" font-size="10" fill="#c23b3b">À LOUER</text></g>
+    <g class="tr"><rect x="206" y="228" width="26" height="20" fill="#b0844f"/><rect x="216" y="228" width="5" height="20" fill="#d9bb86"/></g>
+    <g class="tr"><rect x="230" y="236" width="18" height="12" fill="#a37746"/></g>
+    <g class="tr"><ellipse cx="180" cy="249" rx="7" ry="2.4" fill="#6d8a3a"/></g>
+    <g class="tr"><rect x="150" y="244" width="12" height="5" rx="2" fill="#3f8f4f" transform="rotate(-12 156 246)"/></g>
+  </g>
+
+  <g class="yo-grill yo-new">
+    <g class="smoke"><circle cx="28" cy="206" r="5"/><circle cx="38" cy="203" r="6"/><circle cx="33" cy="208" r="4"/><circle cx="42" cy="206" r="4.5"/></g>
+    <g class="grill-body">
+      <path d="M20 246 l-3 8 M48 246 l3 8" stroke="#1e1d24" stroke-width="2.6" stroke-linecap="round"/>
+      <rect x="16" y="220" width="36" height="28" rx="4" fill="#c45a2a"/>
+      <path d="M16 229 h36 M16 239 h36" stroke="#9a4320" stroke-width="2"/>
+      <ellipse class="ember" cx="34" cy="219.5" rx="18" ry="3.6" fill="url(#gEmber2)"/>
+      <rect x="14" y="218" width="40" height="1.6" fill="#8e8e9a"/>
+      <ellipse cx="25" cy="215.5" rx="6" ry="3.4" fill="#a0582a"/><ellipse cx="38" cy="215.5" rx="6" ry="3.4" fill="#b8682e"/>
+      <path d="M17 215.5 h28" stroke="#d6d0c0" stroke-width=".9"/>
+    </g>
+  </g>
+
+  <g class="yo-furn yo-new">
+    ${chairsX.map((x, i) => chairSvg(x, chairCols[i])).join('')}
+    ${sitter(74, '#6b3f24', '#ff5ea2', 'hair', 'yk1')}${sitter(126, '#8a5636', '#3ddc9a', 'cap', 'yk2')}${sitter(154, '#4d2c18', '#ffd23f', 'scarf', 'yk3')}${sitter(206, '#9a6440', '#62c9f3', 'hair', 'yk4')}
+    ${table2(100)}${table2(180)}
+    ${drinkSvg(100, 1)}${drinkSvg(180, 2)}
+  </g>
+
+  <g class="yo-dj yo-new">
+    <rect x="262" y="194" width="18" height="40" rx="3" fill="#1d1b26"/>
+    <circle cx="271" cy="206" r="6" fill="#3a3746"/><circle class="cone" cx="271" cy="206" r="3.8" fill="#262330"/>
+    <circle cx="271" cy="224" r="5" fill="#3a3746"/><circle class="cone" cx="271" cy="224" r="3" fill="#262330"/>
+    <path d="M271 234 v20 M265 254 h12" stroke="#1d1b26" stroke-width="2.4"/>
+    <g class="notes" font-size="11" fill="#ffd23f"><text x="262" y="190">♪</text><text x="274" y="186">♫</text><text x="268" y="181">♪</text></g>
+    <g><rect x="242" y="206" width="15" height="20" rx="5" fill="#ff8a1e"/><circle cx="249.5" cy="199" r="7" fill="#4d2c18"/>
+      <path d="M242 198 a7.5 7.5 0 0 1 15 0" stroke="#15101f" stroke-width="2.4" fill="none"/><rect x="240" y="196" width="4" height="6" rx="1.5" fill="#15101f"/><rect x="255" y="196" width="4" height="6" rx="1.5" fill="#15101f"/>
+      <path d="M257 212 l7 -12" stroke="#4d2c18" stroke-width="3.4" stroke-linecap="round"/></g>
+    <rect x="226" y="218" width="40" height="34" rx="3" fill="#1d1b26"/>
+    <rect x="226" y="236" width="40" height="2.4" fill="#ff5ea2" filter="url(#fGlow2)"/>
+    <circle cx="236" cy="216" r="6" fill="#2b2a33"/><circle cx="236" cy="216" r="1.5" fill="#ff5ea2"/><circle cx="256" cy="216" r="6" fill="#2b2a33"/><circle cx="256" cy="216" r="1.5" fill="#3ddc9a"/>
+  </g>
+
+  ${bossSvg(338, 'boss-guy', false)}
+
+  <g class="taxi">
+    <path d="M86 272 l44 -9 v18z" fill="#fff6c2" opacity=".16"/>
+    <rect x="6" y="256" width="68" height="4" rx="1" fill="#1f6b36"/><rect x="14" y="251" width="16" height="6" rx="1" fill="#ff8a1e"/><rect x="34" y="252" width="12" height="5" rx="1" fill="#62c9f3"/>
+    <rect x="0" y="260" width="86" height="24" rx="5" fill="#2e9d4e"/>
+    ${[8, 22, 36, 50, 64].map(x => `<rect x="${x}" y="264" width="11" height="8" rx="1.5" fill="#1a1437"/>`).join('')}
+    <rect x="0" y="276" width="86" height="3" fill="#ffd23f"/>
+    <circle cx="18" cy="286" r="6" fill="#15101f"/><circle cx="68" cy="286" r="6" fill="#15101f"/><circle cx="18" cy="286" r="2.4" fill="#5e5772"/><circle cx="68" cy="286" r="2.4" fill="#5e5772"/>
+    <circle cx="85" cy="274" r="2.4" fill="#fff6c2"/><rect x="0" y="270" width="3" height="5" fill="#ff3b3b"/>
+  </g>
+  <g class="dancers">${dancerSvg(70, '#6b3f24', '#3ddc9a', 0)}${dancerSvg(140, '#8a5636', '#ff5ea2', .15)}${dancerSvg(210, '#4d2c18', '#ffd23f', .3)}
+    <g class="boss-dance"><g transform="translate(0 44)"><g class="dancer" style="animation-delay:.2s">${bossSvg(290, 'bd', true)}</g></g></g>
+  </g>
+  <g id="sceneFx"></g>
+</g>`;
+  }
+
+  async function swapIn(oldSel, newSel, px, py) {
+    const o = Q(oldSel);
+    if (o) { o.classList.add('a-out'); puff(px, py, 5); sfx.crash(); await wait(560); }
+    const n = Q(newSel); n.classList.add('a-drop');
+    return () => { if (o) o.classList.remove('a-out'); n.classList.remove('a-drop'); };
+  }
+  function bossGrr() {
+    const g = Q('.boss-guy');
+    if (!g) return;
+    g.classList.remove('a-grr'); void sceneEl.getBoundingClientRect(); g.classList.add('a-grr');
+    setTimeout(() => g.classList.remove('a-grr'), 1100);
+  }
+  const ANIM2 = {
+    async deblai() {
+      const items = QA('.yo-junk .tr');
+      items.forEach((el, i) => setTimeout(() => { const b = el.getBBox(); el.classList.add('a-fly'); puff(b.x + b.width / 2, b.y + b.height / 2, 2); sfx.whoosh(); }, i * 140));
+      await wait(items.length * 140 + 420);
+      const sh = Q('.yo-shutter'); sh.classList.add('a-rollup');
+      for (let i = 0; i < 8; i++) setTimeout(sfx.clack, i * 90);
+      await wait(950);
+      addDone('deblai'); unanim(items, 'a-fly'); sh.classList.remove('a-rollup');
+      sparkles(143, 185, 110, 10); sfx.chime();
+    },
+    async facade() {
+      const n = Q('.yo-wall-new'), r = Q('#yWallReveal'), ro = Q('.roller');
+      n.setAttribute('clip-path', 'url(#yClipWall)'); n.style.display = 'inline'; ro.style.display = 'inline';
+      let last = 0;
+      await tween(2000, e => {
+        const w = 280 * e;
+        r.setAttribute('width', f1(w));
+        ro.setAttribute('transform', `translate(${f1(4 + w)} ${f1(125 + Math.sin(e * Math.PI * 9) * 88)})`);
+        if (e - last > .12) { last = e; sfx.roll(); }
+      }, true);
+      addDone('facade'); n.removeAttribute('clip-path'); n.style.display = ''; ro.style.display = ''; r.setAttribute('width', 0);
+      sparkles(143, 120, 130, 14); sfx.chime();
+    },
+    async auvent() {
+      const undo = await swapIn('.yo-awn-old', '.yo-awn-new', 143, 124);
+      addDone('auvent'); await wait(380); sfx.thud(); await wait(420); undo();
+      sparkles(143, 124, 130, 10); sfx.chime();
+    },
+    async comptoir() {
+      const undo = await swapIn('.yo-bar-old', '.yo-bar-new', 196, 205);
+      QA('.yo-bar-new').forEach(el => el.classList.add('a-drop'));
+      addDone('comptoir'); await wait(380); sfx.thud(); await wait(420); undo();
+      QA('.yo-bar-new').forEach(el => el.classList.remove('a-drop'));
+      sparkles(196, 190, 50, 10); sfx.chime();
+    },
+    async mobilier() {
+      const parts = QA('.yo-furn .ch, .yo-furn .tb'), ppl = QA('.yk1, .yk2, .yk3, .yk4, .yo-furn .drink');
+      parts.forEach((el, i) => anim(el, 'a-drop', i * .08));
+      ppl.forEach((el, i) => anim(el, 'a-pop', parts.length * .08 + .45 + i * .16));
+      addDone('mobilier');
+      parts.forEach((_, i) => setTimeout(sfx.thud, i * 80 + 380));
+      await wait(parts.length * 80 + 750); sfx.pop(2);
+      await wait(ppl.length * 160 + 450);
+      unanim(parts, 'a-drop'); unanim(ppl, 'a-pop');
+    },
+    async four() {
+      const b = Q('.yo-grill .grill-body'); b.classList.add('a-drop'); addDone('four');
+      await wait(400); sfx.thud(); await wait(380); b.classList.remove('a-drop');
+      sfx.fire(); sparkles(34, 214, 22, 8);
+    },
+    async lumieres() {
+      const old = Q('.yo-lights-old'), grp = Q('.yo-lights-new'), items = QA('.yo-lights-new .lt'), lit = Q('.yo-lit');
+      old.classList.add('a-fade');
+      items.forEach(b => { b.style.display = 'none'; }); grp.style.display = 'inline';
+      await wait(400);
+      for (let i = 0; i < items.length; i++) { items[i].style.display = ''; sfx.ping(i); await wait(reduce ? 20 : 140); }
+      lit.style.display = 'inline'; lit.classList.add('a-flicker');
+      await wait(900);
+      addDone('lumieres'); grp.style.display = ''; lit.style.display = ''; lit.classList.remove('a-flicker'); old.classList.remove('a-fade');
+      sparkles(143, 150, 120, 12); sfx.chime();
+    },
+    async ecran() {
+      const tv = Q('.yo-screen'), scr = Q('.yo-screen .tv-screen'), ppl = QA('.yk5, .yk6');
+      tv.classList.add('a-drop'); anim(scr, 'a-flicker', .8);
+      ppl.forEach((el, i) => anim(el, 'a-pop', 2 + i * .2));
+      addDone('ecran');
+      await wait(420); sfx.thud(); await wait(420); sfx.tvOn();
+      await wait(1300); sfx.cheer();
+      await wait(800);
+      tv.classList.remove('a-drop'); unanim([scr], 'a-flicker'); unanim(ppl, 'a-pop');
+      sparkles(82, 170, 40, 8);
+    },
+    async dj() {
+      const d = Q('.yo-dj'), dancers = QA('.dancers > .dancer');
+      d.classList.add('a-drop'); dancers.forEach((el, i) => anim(el, 'a-pop', 1.1 + i * .2));
+      addDone('dj'); await wait(420); sfx.thud(); await wait(320);
+      sfx.jingle();
+      await wait(1700); d.classList.remove('a-drop'); unanim(dancers, 'a-pop');
+      sparkles(249, 220, 24, 8);
+    },
+    async enseigne() {
+      const o = Q('.yo-sign-old'); o.classList.add('a-out'); sfx.crash(); puff(143, 62, 4);
+      await wait(600);
+      const n = Q('.yo-sign-new'); n.classList.add('a-flicker'); addDone('enseigne'); o.classList.remove('a-out');
+      [0, 140, 300, 420].forEach(t => setTimeout(sfx.zzz, t));
+      await wait(1400); n.classList.remove('a-flicker');
+      sparkles(143, 60, 80, 12); sfx.chime();
+    },
+    async ouverture() {
+      const neon = Q('.boss-neon'); neon.classList.add('a-off');
+      [0, 200, 420, 700].forEach(t => setTimeout(sfx.zzz, t));
+      await wait(1300);
+      const g = Q('.boss-guy'); g.classList.add('a-out'); await wait(520);
+      addDone('ouverture'); neon.classList.remove('a-off'); g.classList.remove('a-out');
+      const bd = Q('.boss-dance'); anim(bd, 'a-pop', 0);
+      sfx.jingle(); confetti(reduce ? 20 : 80);
+      for (const [x, y, c] of [[80, 40, '#ff5ea2'], [300, 30, '#3ddc9a'], [190, 56, '#ffd23f'], [350, 70, '#62c9f3'], [40, 70, '#ff8a1e'], [240, 36, '#b18cff']]) { firework(x, y, c); await wait(360); }
+      await wait(600); unanim([bd], 'a-pop');
+    },
+  };
+
+  const CHAPTERS = [
+    { name: 'Chez Tantie', tasks: TASKS, build: buildScene1, anim: ANIM1 },
+    { name: 'Rue Princesse', tasks: TASKS2, build: buildScene2, anim: ANIM2 },
+  ];
+
   let renoBusy = false;
-  async function renovate() {
-    const i = progress.tasks, t = TASKS[i];
+  function renovate() {
+    const c = curChapter(), t = CHAPTERS[c].tasks[chDone(c)];
     if (!t || renoBusy || wallet() < t.cost) return;
-    renoBusy = true; ac();
+    ac();
+    if (view !== c) { view = c; renderHome(true); }
+    if (t.styles) { chooseStyle(t); return; }
+    doRenovate(c, t);
+  }
+  function chooseStyle(t) {
+    openModal(`<p class="kicker">Chantier · ${t.cost} ★</p>
+      <h2 class="big-title">${t.name}</h2>
+      <p>Choisis le style. Ton maquis ne ressemblera à aucun autre.</p>
+      <div class="styles">${t.styles.map((o, k) => `<button class="style-opt" data-act="style" data-k="${k}"><span class="sw" style="background:${o.sw}"></span>${o.n}</button>`).join('')}</div>
+      <div class="actions"><button class="btn btn-sec" data-act="close">Plus tard</button></div>`);
+  }
+  async function doRenovate(c, t) {
+    renoBusy = true;
     const btn = $('#renoBtn');
     btn.disabled = true; btn.classList.remove('ready'); $('#playNext').disabled = true; $('#allLevels').disabled = true;
-    progress.tasks = i + 1; save();
+    if (c === 0) progress.tasks++; else progress.tasks2++;
+    save();
+    const done = chDone(c), last = done === CHAPTERS[c].tasks.length;
     const wl = $('#wallet'); wl.textContent = `★ ${wallet()}`; wl.classList.remove('bump'); void wl.offsetWidth; wl.classList.add('bump');
     sfx.spend();
     const home = $('#home');
     if (home.scrollTop > 10) { home.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); await wait(450); }
+    if (t.styles) { CHAPTERS[c].build(); applyScene(c, done - 1); setCam({ x: 200, y: 150, s: 1 }); }
     say(`On s'y met : ${lcFirst(t.name)} !`);
     await camTo(t.focus[0], t.focus[1], t.focus[2], 900);
-    await ANIM[t.id]();
+    await CHAPTERS[c].anim[t.id]();
     tantieHappy(); say(t.done);
-    await wait(1300);
+    await wait(1500);
+    if (t.boss) { bossGrr(); say(t.boss, 'boss'); await wait(1900); }
     await camTo(200, 150, 1, 900);
     renoBusy = false; $('#playNext').disabled = false; $('#allLevels').disabled = false;
     renderHome(true);
-    if (t.id === 'fete') setTimeout(chapterDone, 700);
+    if (last) setTimeout(() => chapterDone(c), 700);
   }
-  function chapterDone() {
-    openModal(`<p class="kicker">Chapitre 1 terminé</p>
-      <h2 class="big-title">Le maquis est sauvé !</h2>
-      <div class="tantie-row"><span class="avatar" aria-hidden="true">👩🏾‍🍳</span><p>Le propriétaire est passé ce soir, il n'en revenait pas. Grâce à toi, le maquis reste ouvert !</p></div>
-      <p class="note">Chapitre 2 · Un deuxième maquis à Yopougon. Bientôt.</p>
-      <div class="actions"><button class="btn btn-braise" data-act="close">Profiter de la fête</button></div>`);
+  function chapterDone(c) {
+    fireworks(2600);
+    if (c === 0) {
+      openModal(`<p class="kicker">Chapitre 1 terminé</p>
+        <h2 class="big-title">Le maquis est sauvé !</h2>
+        <div class="tantie-row"><span class="avatar" aria-hidden="true">👩🏾‍🍳</span><p>Le propriétaire est passé ce soir, il n'en revenait pas. Grâce à toi, le maquis reste ouvert !</p></div>
+        <div class="actions"><button class="btn btn-braise" data-act="intro" data-set="2" data-i="0">Découvrir le chapitre 2</button></div>`);
+    } else {
+      openModal(`<p class="kicker">Chapitre 2 terminé</p>
+        <h2 class="big-title">La Rue Princesse est à nous !</h2>
+        <div class="tantie-row boss"><span class="avatar boss" aria-hidden="true">😎</span><p>Bon… vous m'avez eu. Mais je reviendrai, hein !</p></div>
+        <p class="note">Chapitre 3 · Un maquis de plage à Grand-Bassam. Bientôt.</p>
+        <div class="actions"><button class="btn btn-braise" data-act="close">Profiter de la fête</button></div>`);
+    }
   }
-  const INTRO = [
-    'Ah, mon fils, tu es enfin là ! Regarde un peu dans quel état est mon maquis…',
-    "Le propriétaire m'a prévenue : si le maquis n'est pas debout pour la fête du quartier, il donne la place à quelqu'un d'autre.",
-    'Chaque niveau gagné te rapporte des étoiles. Avec les étoiles, on répare tout, morceau par morceau. On y va ?',
-  ];
-  function showIntro(i) {
-    openModal(`<p class="kicker">Chapitre 1 · Chez Tantie</p>
-      <div class="tantie-row"><span class="avatar" aria-hidden="true">👩🏾‍🍳</span><p>${INTRO[i]}</p></div>
-      <p class="note">${i + 1} / ${INTRO.length}</p>
-      <div class="actions"><button class="btn btn-braise" data-act="intro" data-i="${i + 1}">${i < INTRO.length - 1 ? 'Suite' : 'On y va !'}</button></div>`);
+  const INTROS = {
+    1: [
+      { who: 'tantie', text: 'Ah, mon fils, tu es enfin là ! Regarde un peu dans quel état est mon maquis…' },
+      { who: 'tantie', text: "Le propriétaire m'a prévenue : si le maquis n'est pas debout pour la fête du quartier, il donne la place à quelqu'un d'autre." },
+      { who: 'tantie', text: 'Chaque niveau gagné te rapporte des étoiles. Avec les étoiles, on répare tout, morceau par morceau. On y va ?' },
+    ],
+    2: [
+      { who: 'tantie', text: 'Grâce à toi, Chez Tantie ne désemplit pas. Un ami me propose un local à la Rue Princesse, à Yopougon !' },
+      { who: 'tantie', text: "Le local est dans un sale état, mais l'emplacement est en or. Il y a juste un petit problème…" },
+      { who: 'boss', text: "Moi, c'est Le Boss. La Rue Princesse, c'est chez moi. Ouvre ton maquis si tu veux, on verra combien de temps tu tiens." },
+      { who: 'tantie', text: "Cette fois, c'est toi qui choisis la déco. On va lui montrer, à ce Boss !" },
+    ],
+  };
+  function showIntro(set, i) {
+    const list = INTROS[set], it = list[i], boss = it.who === 'boss';
+    openModal(`<p class="kicker">Chapitre ${set} · ${CHAPTERS[set - 1].name}</p>
+      <div class="tantie-row${boss ? ' boss' : ''}"><span class="avatar${boss ? ' boss' : ''}" aria-hidden="true">${AVATARS[it.who]}</span><p>${it.text}</p></div>
+      <p class="note">${i + 1} / ${list.length}</p>
+      <div class="actions"><button class="btn btn-braise" data-act="intro" data-set="${set}" data-i="${i + 1}">${i < list.length - 1 ? 'Suite' : 'On y va !'}</button></div>`);
   }
   function levelsSheet() {
+    const grid = (a, b) => `<div class="lv-grid">${LEVELS.slice(a, b).map((L, j) => {
+      const i = a + j, st = progress.stars[i], open = unlocked(i);
+      return `<button class="lv-btn${L.boss ? ' lv-boss' : ''}" data-act="lvl" data-lvl="${i}" ${open ? '' : 'disabled'} aria-label="Niveau ${i + 1}, ${L.name}, ${st} étoile${st > 1 ? 's' : ''} sur 3"><b>${i + 1}</b><span>${'★'.repeat(st)}<span class="off">${'★'.repeat(3 - st)}</span></span></button>`;
+    }).join('')}</div>`;
     openModal(`<p class="kicker">Tous les niveaux</p>
       <h2 class="big-title">Choisis ton niveau</h2>
-      <div class="lv-grid">${LEVELS.map((L, i) => {
-        const st = progress.stars[i], open = unlocked(i);
-        return `<button class="lv-btn" data-act="lvl" data-lvl="${i}" ${open ? '' : 'disabled'} aria-label="Niveau ${i + 1}, ${L.name}, ${st} étoile${st > 1 ? 's' : ''} sur 3"><b>${i + 1}</b><span>${'★'.repeat(st)}<span class="off">${'★'.repeat(3 - st)}</span></span></button>`;
-      }).join('')}</div>
+      <p class="lv-head">Chapitre 1 · Chez Tantie</p>${grid(0, CH1_END)}
+      <p class="lv-head">Chapitre 2 · Rue Princesse</p>${grid(CH1_END, LEVELS.length)}
+      ${chComplete(0) ? '' : '<p class="note">Le chapitre 2 s\'ouvre quand le maquis de Tantie est entièrement rénové.</p>'}
       <p class="note">Rejoue un niveau pour décrocher plus d'étoiles : chaque étoile en plus va dans la caisse du maquis.</p>
       <div class="actions"><button class="btn btn-sec" data-act="close">Fermer</button></div>`);
   }
@@ -1534,11 +2239,12 @@ const MM = (() => {
   let S = null, LI = 0, busy = true, cell = 40, extraUsed = false, sel = null, kbCur = [3, 3], kbPicked = false, hintTimer = null, hinted = [];
   const els = new Map();
   const boardEl = $('#board'), cellsEl = $('#cells'), piecesEl = $('#pieces'), fxEl = $('#fx'), wrapEl = $('#boardwrap'), cursorEl = $('#cursor');
-  let cellEls = [];
+  let cellEls = [], shEls = [];
+  const shadeEl = $('#shade');
   const xy = (r, c) => `translate3d(${(c * cell).toFixed(2)}px, ${(r * cell).toFixed(2)}px, 0)`;
-  const emojiFor = p => p.t === FLY ? '🪰' : p.t === POT ? '🍲' : TYPES[p.t].e;
+  const emojiFor = p => p.t === FLY ? '🪰' : p.t === POT ? '🍲' : p.t === CRATE ? '📦' : TYPES[p.t].e;
   function decorate(el, p) {
-    el.className = 'pc ' + (p.t === FLY ? 'fly' : p.t === POT ? 'pot' : 't' + p.t) + (p.sp && p.sp !== 'm' ? ' sp-' + p.sp : '');
+    el.className = 'pc ' + (p.t === FLY ? 'fly' : p.t === POT ? 'pot' : p.t === CRATE ? 'crate' + (p.hp > 1 ? ' crate2' : '') : 't' + p.t) + (p.sp && p.sp !== 'm' ? ' sp-' + p.sp : '');
     el.querySelector('.em').textContent = emojiFor(p);
   }
   function makeEl(id, p, r, c) {
@@ -1564,6 +2270,11 @@ const MM = (() => {
         d.className = 'cell'; d.innerHTML = '<i class="stain"></i>'; d.dataset.d = S.dirt[r][c];
         cellsEl.appendChild(d); cellEls[r].push(d);
       }
+    }
+    shadeEl.innerHTML = ''; shEls = [];
+    for (let r = 0; r < N; r++) {
+      shEls.push([]);
+      for (let c = 0; c < N; c++) { const d = document.createElement('div'); d.className = 'sh'; d.dataset.on = S.dark[r][c]; shadeEl.appendChild(d); shEls[r].push(d); }
     }
     layout();
     for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) { const p = S.grid[r][c]; makeEl(p.id, p, r, c); }
@@ -1878,12 +2589,15 @@ const MM = (() => {
     sfx.pop(st.mult);
     if (big && !reduce) { boardEl.classList.remove('shake'); void boardEl.offsetWidth; boardEl.classList.add('shake'); }
     for (const c of st.cleared) {
-      burstAt(c.r, c.c, c.t >= 0 ? PCOL[c.t] : c.t === FLY ? '#d9d4ef' : pick(RAINBOW), st.mult);
+      burstAt(c.r, c.c, c.t >= 0 ? PCOL[c.t] : c.t === FLY ? '#d9d4ef' : c.t === CRATE ? '#e2b47a' : pick(RAINBOW), st.mult);
       const el = els.get(c.id);
       if (!el) continue;
       els.delete(c.id); el.classList.add('pop'); setTimeout(() => el.remove(), 330);
     }
     for (const d of st.dirt) cellEls[d.r][d.c].dataset.d = d.v;
+    for (const l of st.light) { const e = shEls[l.r][l.c]; e.dataset.on = 0; e.classList.remove('flash'); void e.offsetWidth; e.classList.add('flash'); }
+    if (st.light.length) sfx.ping(Math.min(7, st.light.length));
+    for (const dm of st.damaged) { const el = els.get(dm.id); if (el) { decorate(el, dm); flair(el, 'hit', 400); } burstAt(dm.r, dm.c, '#e2b47a', 1); }
     for (const cr of st.created) { const el = els.get(cr.id); if (el) { decorate(el, cr); flair(el, 'born', 450); } fxCreated(cr); }
     if (st.created.length) setTimeout(sfx.special, 80);
     scorePop(st);
@@ -1942,6 +2656,17 @@ const MM = (() => {
     updateHUD();
     await wait(480 * T);
   }
+  const TAUNTS = { crates: ['Prends mes cartons !', 'Cadeau du Boss !', 'Range ça si tu peux !'], dark: ['On coupe le courant !', 'Bonne nuit !', 'Délestage !'] };
+  async function animateAttack(a) {
+    const bp = $('#bossPop');
+    bp.querySelector('.bp-say').textContent = pick(TAUNTS[a.kind]);
+    bp.classList.remove('show'); void bp.offsetWidth; bp.classList.add('show');
+    sfx.boss(); await wait(650 * T);
+    if (a.kind === 'crates') {
+      for (const c of a.cells) { const el = els.get(c.id); if (el) { decorate(el, c); flair(el, 'born', 450); } sfx.thud(); await wait(130 * T); }
+    } else { for (const c of a.cells) shEls[c.r][c.c].dataset.on = 1; sfx.zzz(); }
+    updateHUD(); await wait(500 * T);
+  }
   async function attemptMove(a, b) {
     if (busy || !S) return;
     const pa = S.grid[a[0]][a[1]], pb = S.grid[b[0]][b[1]];
@@ -1972,6 +2697,7 @@ const MM = (() => {
       if (el) { decorate(el, { t: FLY }); flair(el, 'infest', 520); }
       sfx.buzz(); await wait(420 * T);
     }
+    if (end.attack) await animateAttack(end.attack);
     if (end.shuffled) await animateShuffle(end.shuffled);
     updateHUD();
     if (end.state === 'win') return win();
@@ -2056,6 +2782,7 @@ const MM = (() => {
     openModal(`<p class="kicker">Niveau ${i + 1}</p>
       <h2 class="big-title">${L.name}</h2>
       <div class="tantie-row"><span class="avatar" aria-hidden="true">👩🏾‍🍳</span><p>${L.tantie}</p></div>
+      ${L.bossLine ? `<div class="tantie-row boss"><span class="avatar boss" aria-hidden="true">😎</span><p>${L.bossLine}</p></div>` : ''}
       <div class="goal-row">${L.goals.map(g => `<span class="goal-chip">${goalIcon(g)}${goalText(g)}</span>`).join('')}</div>
       <p class="moves-info">${L.moves} coups pour tout faire</p>
       <div class="actions"><button class="btn btn-braise" data-act="go">C'est parti</button></div>`);
@@ -2074,8 +2801,9 @@ const MM = (() => {
     S.combo = 0;
     for (let i = 0; i < 10; i++) { const keys = MM.specialKeys(S); if (!keys.length) break; await resolveAll({ seeds: keys }); }
     updateHUD();
-    const stars = MM.starsFor(S), last = LI === LEVELS.length - 1, before = progress.stars[LI];
+    const stars = MM.starsFor(S), before = progress.stars[LI];
     progress.stars[LI] = Math.max(before, stars); save();
+    const last = !(LI + 1 < LEVELS.length && unlocked(LI + 1)), gate = LI + 1 === CH1_END && !chComplete(0);
     const gained = progress.stars[LI] - before, reno = canRenovate();
     sfx.win();
     const lines = { 1: "Ça passe, mais Tantie sait que tu peux faire mieux.", 2: "Les clients sont contents, ils vont revenir.", 3: "Tantie danse derrière le comptoir !" };
@@ -2089,6 +2817,7 @@ const MM = (() => {
       <p class="score-line">Score <strong>${S.score.toLocaleString('fr-FR')}</strong></p>
       <p>${lines[stars]}</p>
       ${gained ? `<p class="gain">+${gained} ★ pour le maquis</p>` : '<p class="note">Pas d\'étoile en plus cette fois. Bats ton meilleur score pour en gagner.</p>'}
+      ${gate ? '<p class="note">Rénove tout le maquis de Tantie pour ouvrir le chapitre 2.</p>' : ''}
       <div class="actions">${acts}</div>`);
     setTimeout(() => fireworks(1800), 250);
     const spans = document.querySelectorAll('.stars-big span');
@@ -2096,9 +2825,7 @@ const MM = (() => {
   }
   function lose() {
     busy = true; clearHint(); sfx.lose();
-    const left = MM.goalStatus(S).filter(g => g.left > 0).map(g =>
-      g.kind === 'collect' ? `${g.left} ${g.left > 1 ? TYPES[g.t].many : TYPES[g.t].one}` :
-      g.kind === 'dirt' ? `${g.left} tache${g.left > 1 ? 's' : ''}` : `${g.left} mouche${g.left > 1 ? 's' : ''}`);
+    const left = MM.goalStatus(S).filter(g => g.left > 0).map(leftText);
     openModal(`<p class="kicker">Niveau ${LI + 1}</p>
       <h2 class="big-title">Plus de coups…</h2>
       <p class="near">Il te manquait juste ${joinFr(left)}.</p>
@@ -2132,27 +2859,45 @@ const MM = (() => {
     else if (act === 'close') closeModal();
     else if (act === 'levels') { if (!$('#game').hidden) { S = null; busy = true; clearHint(); showScreen('home'); } levelsSheet(); }
     else if (act === 'lvl') { closeModal(); startLevel(+b.dataset.lvl); }
+    else if (act === 'style') {
+      const c = curChapter(), t = CHAPTERS[c].tasks[chDone(c)];
+      if (!t || !t.styles) return closeModal();
+      progress.styles[t.id] = +b.dataset.k; save(); closeModal(); doRenovate(c, t);
+    }
     else if (act === 'intro') {
-      const i = +b.dataset.i;
-      if (i < INTRO.length) showIntro(i);
-      else { progress.intro = true; save(); closeModal(); say(homeLine()); }
+      const set = +b.dataset.set || 1, i = +b.dataset.i;
+      if (i < INTROS[set].length) showIntro(set, i);
+      else {
+        if (set === 1) progress.intro = true; else { progress.intro2 = true; view = 1; }
+        save(); closeModal(); renderHome();
+      }
     }
   });
   $('#playNext').addEventListener('click', e => { ac(); const l = +e.currentTarget.dataset.lvl; if (l < 0) levelsSheet(); else startLevel(l); });
   $('#allLevels').addEventListener('click', () => { ac(); levelsSheet(); });
   $('#renoBtn').addEventListener('click', renovate);
+  $('#chTabs').addEventListener('click', e => { const b = e.target.closest('[data-view]'); if (!b || renoBusy) return; ac(); view = +b.dataset.view; renderHome(); });
   $('#back').addEventListener('click', goHome);
   $('#soundHome').addEventListener('click', toggleSound);
   $('#soundGame').addEventListener('click', toggleSound);
 
+  function testerMode() {
+    const h = location.hash;
+    if (h !== '#testeur' && h !== '#testeur2') return;
+    for (let i = 0; i < CH1_END; i++) progress.stars[i] = Math.max(progress.stars[i], 3);
+    progress.tasks = TASKS.length; progress.intro = true;
+    if (h === '#testeur2') for (let i = CH1_END; i < LEVELS.length; i++) progress.stars[i] = Math.max(progress.stars[i], 3);
+    save();
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+  }
   function boot(data) {
     load();
-    if (data && data.progress && Array.isArray(data.progress.stars)) {
-      const p = data.progress;
-      progress = { stars: LEVELS.map((_, i) => p.stars[i] | 0), sound: p.sound !== false, tasks: Math.min(TASKS.length, p.tasks | 0), intro: !!p.intro };
-    }
-    buildScene(); renderHome();
-    if (!progress.intro) showIntro(0);
+    if (data && data.progress) readProgress(data.progress);
+    testerMode();
+    view = curChapter();
+    renderHome();
+    if (!progress.intro) showIntro(1, 0);
+    else if (chComplete(0) && !progress.intro2) showIntro(2, 0);
   }
   const hot = window.claude && window.claude.hot;
   if (hot && hot.snapshot) hot.snapshot(() => ({ progress }));
