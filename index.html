@@ -352,6 +352,31 @@ button{font:inherit;color:inherit}
 @keyframes callout{0%{transform:translate(-50%,-50%) scale(.3) rotate(-8deg);opacity:0}18%{transform:translate(-50%,-50%) scale(1.15) rotate(-4deg);opacity:1}30%{transform:translate(-50%,-50%) scale(1) rotate(-4deg);opacity:1}78%{opacity:1}100%{transform:translate(-50%,-75%) scale(1) rotate(-4deg);opacity:0}}
 @keyframes panelIn{from{transform:scale(.86) translateY(12px);opacity:0}}
 @keyframes starpop{0%{transform:scale(.3) rotate(-30deg)}60%{transform:scale(1.25) rotate(8deg)}100%{transform:scale(1) rotate(0)}}
+/* ---------- Responsive ---------- */
+html{height:100dvh;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+.home-main,.home-side{display:flex;flex-direction:column;gap:14px;min-width:0}
+.topbar,.hud{max-width:max(300px,var(--bw,540px))}
+@media (min-width:900px),(orientation:landscape) and (max-height:560px) and (min-width:600px){
+  .home-inner{max-width:1120px;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(300px,1fr);column-gap:28px;row-gap:14px;align-items:start}
+  .home-top{grid-column:1 / -1}
+  .home-main{position:sticky;top:0}
+}
+@media (orientation:landscape) and (max-height:560px) and (min-width:600px){
+  #game{display:grid;grid-template-columns:minmax(210px,300px) minmax(0,1fr);grid-template-rows:auto auto 1fr;column-gap:20px;padding-block:8px}
+  #game .topbar{grid-column:1;grid-row:1;max-width:none}
+  #game .hud{grid-column:1;grid-row:2;grid-template-columns:1fr 1fr;max-width:none;margin:10px 0 0}
+  #game .hud-box:nth-child(2){grid-column:1 / -1;grid-row:1}
+  #game .boardwrap{grid-column:2;grid-row:1 / 4}
+  #game .astuce{grid-column:1;grid-row:3;align-self:end;margin:0}
+}
+@media (max-height:600px){
+  .panel{width:min(100%,520px);gap:9px;padding:14px 16px}
+  .big-title{font-size:24px}
+  .stars-big{font-size:38px}
+  .tantie-row p{font-size:14px;padding:8px 11px}
+  .avatar{width:40px;height:40px;font-size:23px}
+  .btn{padding:10px 16px}
+}
 /* ---------- Chapitre 2 ---------- */
 .tabs{display:flex;gap:6px;min-width:0;flex-wrap:wrap}
 .chip.tab{cursor:pointer;border:0;font:inherit;font-size:12px;font-weight:700;letter-spacing:.04em}
@@ -448,10 +473,13 @@ button{font:inherit;color:inherit}
       <h1 class="logo"><span class="l1">Maquis</span> <span class="l2">Mania</span></h1>
       <button id="soundHome" class="btn-ghost">Son : oui</button>
     </header>
+    <div class="home-main">
     <div class="scene-hud"><div class="tabs" id="chTabs"><span class="chip">Chapitre 1 · Chez Tantie</span></div><span class="chip wallet" id="wallet" aria-label="Étoiles à dépenser">★ 0</span></div>
     <div class="scene-wrap">
       <svg id="scene" viewBox="0 0 400 300" role="img" aria-label="Le maquis de Tantie, la nuit"></svg>
     </div>
+    </div>
+    <div class="home-side">
     <div class="bulle-tantie"><span class="avatar" id="sayAvatar" aria-hidden="true">👩🏾‍🍳</span><p id="tantieLine" aria-live="polite">Ah, mon fils, tu es là !</p></div>
     <div class="reno-bar"><span>Rénovation</span><div class="track"><div id="renoFill"></div></div><span id="renoCount">0/11</span></div>
     <div class="task-card">
@@ -464,6 +492,7 @@ button{font:inherit;color:inherit}
     </div>
     <ol class="tasks" id="taskList" aria-label="Les chantiers du maquis"></ol>
     <div class="pied"><span>Prototype · ta progression reste sur cet appareil</span></div>
+    </div>
   </div>
 </section>
 
@@ -571,14 +600,14 @@ const MM = (() => {
       tantie: "On n'a pas fini de ranger que le patron d'en face vient déjà nous regarder de travers…",
       bossLine: "Tchié ! Encore un maquis dans MA rue ? Vous n'allez pas tenir une semaine.",
       tip: "Casse les cartons du bas en premier : ça libère de la place pour les cascades." },
-    { name: "Coupure de courant", moves: 22, colors: 5, goals: [{ kind: 'light' }], stars: [3000, 9000, 13000],
+    { name: "Coupure de courant", moves: 18, colors: 5, goals: [{ kind: 'light' }], stars: [3000, 8500, 12000],
       layout: ["nnnnnnnn", "nnnnnnnn", "nnnnnnnn", "........", "........", "........", "........", "........"],
-      tantie: "Délestage ! Le haut du plateau est dans le noir. Chaque combinaison faite dans le noir rallume la case.",
-      tip: "Dans le noir, on ne voit pas les pièces. Un feu vertical rallume toute une colonne." },
-    { name: "Le courant revient", moves: 25, colors: 5, goals: [{ kind: 'light' }, { kind: 'collect', t: 0, n: 18 }], stars: [3000, 10000, 14500],
+      tantie: "Délestage ! Le haut du plateau est dans le noir. Fais tes combinaisons dans le noir ou juste à côté : les cases touchées se rallument.",
+      tip: "Joue au bord du noir : chaque combinaison rallume les cases qui la touchent." },
+    { name: "Le courant revient", moves: 20, colors: 5, goals: [{ kind: 'light' }, { kind: 'collect', t: 0, n: 18 }], stars: [3000, 10000, 14000],
       layout: ["nn....nn", "nn....nn", "nn....nn", "........", "........", "nn....nn", "nn....nn", "nn....nn"],
       tantie: "Le courant revient par morceaux… Rallume les coins et sers les alloco en même temps.",
-      tip: "Les coins sont difficiles. Une braise bien placée en rallume neuf d'un coup." },
+      tip: "Pour les coins, fais une combinaison juste à côté : la case dans le noir se rallume." },
     { name: "Le Boss attaque", moves: 22, colors: 5, goals: [{ kind: 'boss' }], boss: { hp: 200, every: 4, attack: ['crates'], n: 3 }, stars: [3000, 13000, 18000],
       tantie: "Le Boss a envoyé ses gars nous déposer des cartons pendant qu'on sert ! Chaque pièce que tu casses lui fait mal.",
       bossLine: "Tu veux la guerre ? Prends mes cartons !",
@@ -587,7 +616,7 @@ const MM = (() => {
       layout: ["........", "........", "........", "..c..c..", ".C....C.", "..c..c..", "f......f", "ff....ff"],
       tantie: "Les mouches se cachent derrière les cartons. On nettoie tout ça !",
       tip: "Une combinaison collée à un carton et à une mouche fait d'une pierre deux coups." },
-    { name: "Nuit noire", moves: 26, colors: 5, goals: [{ kind: 'light' }, { kind: 'dirt' }], stars: [3000, 12500, 17500],
+    { name: "Nuit noire", moves: 24, colors: 5, goals: [{ kind: 'light' }, { kind: 'dirt' }], stars: [3000, 12500, 17500],
       layout: ["nnnnnnnn", "nnnnnnnn", "nnnnnnnn", "nnnnnnnn", "........", "dddddddd", "dddddddd", "........"],
       tantie: "Plus de courant et la boue de la pluie… Rallume tout et fais briller le sol.",
       tip: "Les pièces qui tombent du noir deviennent visibles en arrivant dans la lumière." },
@@ -595,7 +624,7 @@ const MM = (() => {
       layout: ["........", "........", "........", "C..CC..C", "........", ".C.CC.C.", "........", "........"],
       tantie: "Le livreur a tout empilé devant la porte. Casse les cartons et sors les poulets !",
       tip: "Une marmite échangée avec un poulet fait le ménage dans toute la commande." },
-    { name: "Délestage", moves: 22, colors: 5, goals: [{ kind: 'light' }, { kind: 'crates' }], stars: [3000, 11000, 15500],
+    { name: "Délestage", moves: 19, colors: 5, goals: [{ kind: 'light' }, { kind: 'crates' }], stars: [3000, 10500, 14500],
       layout: ["n.n.n.n.", ".n.n.n.n", "n.n.n.n.", ".n.n.n.n", "........", "..c..c..", ".C....C.", "........"],
       tantie: "Le courant saute une case sur deux. Et les cartons sont toujours là !",
       tip: "Vise les lignes : un seul feu rallume plusieurs cases d'un coup." },
@@ -606,7 +635,7 @@ const MM = (() => {
     { name: "Grand rush", moves: 22, colors: 6, goals: [{ kind: 'collect', t: 1, n: 15 }, { kind: 'collect', t: 3, n: 15 }, { kind: 'collect', t: 4, n: 15 }], stars: [3000, 7000, 9500],
       tantie: "Tout Yopougon veut goûter chez nous ! Poisson, attiéké, poulet : on envoie !",
       tip: "Avec 6 sortes de pièces, chaque pièce spéciale compte double." },
-    { name: "Mouches dans le noir", moves: 24, colors: 5, spread: true, goals: [{ kind: 'light' }, { kind: 'flies' }], stars: [3000, 12000, 16500],
+    { name: "Mouches dans le noir", moves: 21, colors: 5, spread: true, goals: [{ kind: 'light' }, { kind: 'flies' }], stars: [3000, 12000, 16500],
       layout: ["nnnnnnnn", "nnnnnnnn", "nnnnnnnn", "........", "........", "........", ".f.ff.f.", "f.f..f.f"],
       tantie: "Profitant du noir, les mouches sont revenues. On rallume et on les chasse !",
       tip: "Les mouches se multiplient si tu ne les touches pas. Commence par elles." },
@@ -614,7 +643,7 @@ const MM = (() => {
       layout: ["........", "..C..C..", "........", "dddddddd", "dDDddDDd", "dddddddd", "f..cc..f", "ff....ff"],
       tantie: "Les gars du Boss ont tout renversé cette nuit. Cartons, boue, mouches : c'est le désordre total.",
       tip: "Deux pièces spéciales échangées ensemble règlent plusieurs problèmes d'un coup." },
-    { name: "Veille d'ouverture", moves: 24, colors: 5, goals: [{ kind: 'light' }, { kind: 'crates' }, { kind: 'collect', t: 2, n: 20 }], stars: [3000, 12000, 15500],
+    { name: "Veille d'ouverture", moves: 20, colors: 5, goals: [{ kind: 'light' }, { kind: 'crates' }, { kind: 'collect', t: 2, n: 20 }], stars: [3000, 11000, 15000],
       layout: ["nnnnnnnn", "nnnnnnnn", "........", "........", "..CccC..", "........", "........", "........"],
       tantie: "Demain c'est la grande ouverture. Il faut de la lumière, de la place et beaucoup de piment !",
       tip: "Garde tes marmites pour la fin : elles vident le plateau d'une couleur." },
@@ -837,7 +866,7 @@ const MM = (() => {
 
   function resolveStep(S, ctx) {
     ctx = ctx || {};
-    const g = S.grid, clear = new Set(), placements = new Map(), triggered = new Set();
+    const g = S.grid, clear = new Set(), placements = new Map(), triggered = new Set(), near = new Set();
     const res = { cleared: [], created: [], effects: [], dirt: [], light: [], damaged: [], converted: [], fliesKilled: 0, gained: 0, mult: 0 };
     if (ctx.combo) seedCombo(S, ctx.combo, clear, triggered, res);
     else if (ctx.seeds) { if (!ctx.seeds.length) return null; ctx.seeds.forEach(k => clear.add(k)); }
@@ -848,7 +877,7 @@ const MM = (() => {
         const spec = specialFor(S, grp, ctx.swapKeys || []);
         for (const k of grp.keys) if (!spec || k !== spec.place) clear.add(k);
         if (spec) placements.set(spec.place, spec.sp);
-        for (const k of grp.keys) for (const n of neigh(k)) { const p = at(S, n); if (fixed(p)) clear.add(n); }
+        for (const k of grp.keys) for (const n of neigh(k)) { const p = at(S, n); if (fixed(p)) clear.add(n); const [nr, nc] = rc(n); if (S.dark[nr][nc]) near.add(n); }
       }
     }
     S.combo++; res.mult = S.combo;
@@ -877,6 +906,10 @@ const MM = (() => {
     for (const k of new Set([...clear, ...placements.keys()])) {
       const [r, c] = rc(k);
       if (S.dirt[r][c] > 0) { S.dirt[r][c]--; res.dirt.push({ r, c, v: S.dirt[r][c] }); res.gained += 50; }
+      if (S.dark[r][c]) { S.dark[r][c] = 0; res.light.push({ r, c }); res.gained += 40; }
+    }
+    for (const k of near) {
+      const [r, c] = rc(k);
       if (S.dark[r][c]) { S.dark[r][c] = 0; res.light.push({ r, c }); res.gained += 40; }
     }
     if (S.L.boss) S.bossDmg += res.cleared.length + res.damaged.length;
@@ -2283,7 +2316,8 @@ const MM = (() => {
     if ($('#game').hidden) return;
     const w = wrapEl.clientWidth, h = wrapEl.clientHeight;
     if (!w || !h) return;
-    const bw = Math.max(240, Math.floor(Math.min(w, h - 20, 540)));
+    const bw = Math.max(200, Math.floor(Math.min(w, h - 16, 620)));
+    $('#game').style.setProperty('--bw', bw + 'px');
     const frame = Math.round(bw * .022) + 5;
     cell = (bw - frame * 2) / N;
     boardEl.style.width = bw + 'px'; boardEl.style.height = bw + 'px';
